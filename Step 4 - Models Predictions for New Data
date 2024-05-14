@@ -1,0 +1,2510 @@
+Models Predictions on New Samples
+Schedule refresh for models
+###pip install schedule
+#import sys
+
+#sys.path.append("/past/the/path/you/copied/here")
+import time
+import threading
+import schedule
+from IPython.display import display, Javascript
+def run_notebook_code():
+    ### Your notebook code to be executed every 24 hours
+    display(Javascript('IPython.notebook.execute_cell_range(IPython.notebook.get_selected_index()+1, IPython.notebook.ncells())'))
+
+def run_scheduler():
+    ### Schedule the code to run every 24 hours
+    schedule.every(24).hours.do(run_notebook_code)
+
+    ### Run the scheduler
+    while True:
+        schedule.run_pending()
+        time.sleep(1)
+
+# Create a thread for the scheduler and start it
+scheduler_thread = threading.Thread(target=run_scheduler)
+scheduler_thread.daemon = True  # Daemonize the thread so it exits when the main thread exits
+scheduler_thread.start()
+Import Packages
+#pip install factor_analyzer
+#pip install --upgrade numpy
+#pip install --user numpy
+#pip install statsmodels
+import pandas as pd
+import numpy as np
+
+import scipy.stats as ss
+import researchpy as rp
+import scipy.stats as stats
+import csv
+import pandas as pd
+import numpy as np
+
+from scipy import stats
+from scipy.stats import chisquare
+from scipy.stats import chi2_contingency
+from scipy.stats import f_oneway
+from scipy.stats import kstest
+from scipy.stats import ks_2samp
+from scipy.stats import norm
+from scipy.stats import iqr
+
+from sklearn.linear_model import LinearRegression
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import classification_report, confusion_matrix
+from sklearn.model_selection import train_test_split
+from sklearn import preprocessing
+from sklearn.preprocessing import LabelEncoder
+from sklearn.datasets import load_boston
+from sklearn import linear_model
+
+import matplotlib.pyplot as plt
+plt.style.use('classic')
+import seaborn as sns
+plt.style.use('seaborn')
+get_ipython().run_line_magic('matplotlib', 'inline')
+
+#from ydata_profiling import ProfileReport
+import statsmodels.api as sm
+import statsmodels.formula.api as smf
+
+import chart_studio
+import re
+import cv2
+
+import missingno as msno
+import warnings
+warnings.filterwarnings("ignore")
+
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api
+
+from statsmodels.stats.outliers_influence import variance_inflation_factor
+from statsmodels.tools.tools import add_constant
+
+#port csv
+#mport pyodbc
+#.read_sql_query
+
+import researchpy as rp
+import scipy.stats as stats
+
+
+import pandas as pd
+import numpy as np
+import scipy.stats as ss
+from math import log
+#pd.set_option('display.max_rows', None, 'display.max_columns', None)
+Load new data Sample
+from datetime import datetime
+import os
+import pandas as pd
+
+# Path to the folder
+folder_path = rfolder_path = r'C:/Users/Knowl/Desktop/‏‏SADAC System Project/1Input/4Input New Predictions'
+
+# Get a list of all Excel files in the folder
+excel_files = [f for f in os.listdir(folder_path) if f.endswith('.xlsx')]
+
+# Extract dates from the file names and create a dictionary mapping files to dates
+file_dates = {file: pd.to_datetime(file.split('_')[-1].split('.')[0], errors='coerce') for file in excel_files}
+
+# Sort the files by date
+sorted_files = sorted(file_dates.keys(), key=file_dates.get, reverse=True)
+
+# Select the 350 most recent files
+recent_files = sorted_files[:350]
+
+# Initialize an empty DataFrame to store the loaded data
+loaded_data = pd.DataFrame()
+
+# Load data from the "Main" tab of the selected files
+for file in recent_files:
+    file_path = os.path.join(folder_path, file)
+    df_main = pd.read_excel(file_path, sheet_name='Main')  # Load only from the "Main" tab
+    loaded_data = pd.concat([loaded_data, df_main])
+
+# Reset the index of the merged DataFrame
+loaded_data.reset_index(drop=True, inplace=True)
+
+# Save "Main" tab to dataframe
+df_Main_tab = loaded_data.copy()
+
+# Rename the first column to '#Parent'
+df_Main_tab = df_Main_tab.rename(columns={df_Main_tab.columns[0]: '#Parent'})
+
+#df_Main_tab.head()
+import os
+import pandas as pd
+
+# Path to the folder
+folder_path = rfolder_path = r'C:/Users/Knowl/Desktop/‏‏SADAC System Project/1Input/4Input New Predictions'
+
+# Get a list of all Excel files in the folder
+excel_files = [f for f in os.listdir(folder_path) if f.endswith('.xlsx')]
+
+# Extract dates from the file names and create a dictionary mapping files to dates
+file_dates = {file: pd.to_datetime(file.split('_')[-1].split('.')[0], errors='coerce') for file in excel_files}
+
+# Sort the files by date
+sorted_files = sorted(file_dates.keys(), key=file_dates.get, reverse=True)
+
+# Select the 350 most recent files
+recent_files = sorted_files[:350]
+
+# Initialize an empty DataFrame to store the loaded data from the specified tab
+loaded_data_gIYUS4 = pd.DataFrame()
+
+# Load data from the "Data.root.pAGE3.gIYUS4" tab of the selected files
+for file in recent_files:
+    file_path = os.path.join(folder_path, file)
+    df_gIYUS4 = pd.read_excel(file_path, sheet_name='Data.root.pAGE3.gIYUS4')  # Load only from the specified tab
+    loaded_data_gIYUS4 = pd.concat([loaded_data_gIYUS4, df_gIYUS4])
+
+# Reset the index of the merged DataFrame
+loaded_data_gIYUS4.reset_index(drop=True, inplace=True)
+
+# Select only the first 6 categories for each participant
+df_gIYUS4_tab_first_6 = loaded_data_gIYUS4.groupby('#Parent').head(6).copy()
+
+# Create a new column for counting occurrences within each group
+df_gIYUS4_tab_first_6['count'] = df_gIYUS4_tab_first_6.groupby('#Parent').cumcount()
+
+# Pivot the table to create columns for each category
+pivoted_gIYUS4_tab = df_gIYUS4_tab_first_6.pivot_table(index='#Parent', columns='dataText', values='count', aggfunc='count', fill_value=0)
+
+# Reset the index to make #Parent a regular column
+pivoted_gIYUS4_tab.reset_index(inplace=True)
+
+# Display the transformed DataFrame
+#pivoted_gIYUS4_tab.head()
+import os
+import pandas as pd
+
+# Path to the folder
+folder_path = rfolder_path = r'C:/Users/Knowl/Desktop/‏‏SADAC System Project/1Input/4Input New Predictions'
+
+# Get a list of all Excel files in the folder
+excel_files = [f for f in os.listdir(folder_path) if f.endswith('.xlsx')]
+
+# Extract dates from the file names and create a dictionary mapping files to dates
+file_dates = {file: pd.to_datetime(file.split('_')[-1].split('.')[0], errors='coerce') for file in excel_files}
+
+# Sort the files by date
+sorted_files = sorted(file_dates.keys(), key=file_dates.get, reverse=True)
+
+# Select the 350 most recent files
+recent_files = sorted_files[:350]
+
+# Initialize an empty DataFrame to store the loaded data from the specified tab
+loaded_data_gIYUS3 = pd.DataFrame()
+
+# Load data from the "Data.root.pAGE3.gIYUS3" tab of the selected files
+for file in recent_files:
+    file_path = os.path.join(folder_path, file)
+    df_gIYUS3 = pd.read_excel(file_path, sheet_name='Data.root.pAGE3.gIYUS3')  # Load only from the specified tab
+    loaded_data_gIYUS3 = pd.concat([loaded_data_gIYUS3, df_gIYUS3])
+
+# Select only the first 6 categories for each participant
+df_gIYUS3_tab_first_6 = loaded_data_gIYUS3.groupby('#Parent').head(6).copy()
+
+# Create a new column for counting occurrences within each group
+df_gIYUS3_tab_first_6['count'] = df_gIYUS3_tab_first_6.groupby('#Parent').cumcount()
+
+# Pivot the table to create columns for each category
+pivoted_gIYUS3_tab = df_gIYUS3_tab_first_6.pivot_table(index='#Parent', columns='dataText', values='count', aggfunc='count', fill_value=0)
+
+# Reset the index to make #Parent a regular column
+pivoted_gIYUS3_tab.reset_index(inplace=True)
+
+# Display the transformed DataFrame
+#pivoted_gIYUS3_tab.head()
+# Assuming df_Main_tab, pivoted_gIYUS4_tab, and pivoted_gIYUS3_tab are your DataFrames
+# If not, replace them with your actual DataFrame variables
+
+# Merge df_Main_tab with pivoted_gIYUS4_tab based on #Parent
+merged_df = pd.merge(df_Main_tab, pivoted_gIYUS4_tab, on='#Parent', how='left')
+
+# Merge the result with pivoted_gIYUS3_tab based on #Parent
+merged_df = pd.merge(merged_df, pivoted_gIYUS3_tab, on='#Parent', how='left')
+
+#merged_df.head()
+# Select columns that do not end with 'dataText'
+filtered_columns = [col for col in merged_df.columns if not col.endswith('dataText')]
+
+# Create a new DataFrame with the selected columns
+filtered_dataframe = merged_df[filtered_columns]
+# Assuming your DataFrame is named 'filtered_dataframe'
+# Replace 'filtered_dataframe' with the actual name of your DataFrame
+
+# List of columns to be dropped
+columns_to_drop = [
+    'ProcessInstance.BiztalkID',
+    'ProcessInstance.FormID',
+    'ProcessInstance.UserID',
+    'ProcessInstance.PhaseID',
+    'ProcessInstance.UpdateDate',
+    'ProcessInstance.StageStatus',
+    'ProcessInstance.FlowID',
+    'Data.root.MetaData.referenceNumber',
+    'Data.root.MetaData.sentDate',
+    'Data.root.MetaData.processId',
+    'Data.root.MetaData.language',
+    'Data.root.pAGE3.gIYUS3',
+    'Data.root.pAGE3.gIYUS4',
+    'Data.root.Files',
+    'Data.root.pAGE3.gIYUS10',
+    'Data.root.pAGE3.gIYUS11',
+    'Data.root.pAGE2.jOBB',
+    'Data.root.pAGE2.aRMY4'
+]
+
+# Drop the specified columns
+filtered_dataframe = filtered_dataframe.drop(columns=columns_to_drop, errors='ignore')
+# Assuming filtered_dataframe is your DataFrame
+
+column_mapping = {
+    "ProcessInstance.CreationDate": "Date",
+    "#Parent": "Index",
+    "Data.root.pAGE2.aGE": "Age_Num",
+    "Data.root.pAGE2.gender.dataCode": "Gender_Dico",
+    "Data.root.pAGE2.familystatus.dataCode": "Married_Dico",
+    "Data.root.pAGE2.nATIO.dataCode": "Nation_Dico",
+    "Data.root.pAGE2.mIUT1.dataCode": "Minority_Dico",
+    "Data.root.pAGE2.mIUT.dataCode": "Minority_Type_Categor",
+    "Data.root.pAGE2.eDU.dataCode": "Current_Education_Categor",
+    "Data.root.pAGE2.eDU2.dataCode": "Graduation_Average_Num",
+    "Data.root.pAGE2.eDU3.dataCode": "Math_Units_Num",
+    "Data.root.pAGE2.eDU4.dataCode": "English_Units_Num",
+    "Data.root.pAGE2.eDU5.dataCode": "Bachelors_Degree_Average_Num",
+    "Data.root.pAGE2.eDU6.dataCode": "Masters_Degree_Average_Num",
+    "Data.root.pAGE2.eDU7.dataCode": "Relevant_Education_Dico",
+    "Data.root.pAGE2.eDU8.dataCode": "Do_Psyc_Test_Dico",
+    "Data.root.pAGE2.eDU9.dataCode": "Psyc_Test_Grade_Num",
+    "Data.root.pAGE2.eDU10.dataCode": "Achievements_Preception_Num",
+    "Data.root.pAGE2.eDU11.dataCode": "Hebrew_1_Expressive_Num",
+    "Data.root.pAGE2.eDU12.dataCode": "Hebrew_2_Vocabulary_Num",
+    "Data.root.pAGE2.eDU13.dataCode": "Hebrew_3_Writing_Num",
+    "Data.root.pAGE2.eDU14.dataCode": "Hebrew_4_Reading_Num",
+    "Data.root.pAGE2.eDU15.dataCode": "Hebrew_5_Proofreading_Num",
+    "Data.root.pAGE2.eDU16.dataCode": "Psych_Tests_Subjective_Num",
+    "Data.root.pAGE2.eDU17.dataCode": "Temper_Control_1_Num",
+    "Data.root.pAGE2.eDU18.dataCode": "Temper_Control_2_Num",
+    "Data.root.pAGE2.eDU19.dataCode": "Temper_Control_3_Num",
+    "Data.root.pAGE2.eDU20.dataCode": "Temper_Control_4_Num",
+    "Data.root.pAGE2.eDU21.dataCode": "Temper_Control_5_Num",
+    "Data.root.pAGE2.aRMY1.dataCode": "Service_Type_Categor",
+    "Data.root.pAGE2.aRMY.dataCode": "Commander_Army_Dico",
+    "Data.root.pAGE2.aRMY2.dataCode": "Kazin_Army_Dico",
+    "Data.root.pAGE2.aRMY3.dataCode": "Special_Unit_Army_Dico",
+    "Data.root.pAGE2.aRMY5.dataCode": "Role_Type_Army_Categor",
+    "Data.root.pAGE2.aRMY6.dataCode": "Kaba_Grade_Army_Num",
+    "Data.root.pAGE2.aRMY7.dataCode": "Dapar_Grade_Army_Num",
+    "Data.root.pAGE2.aRMY20.dataCode": "Mechina_Before_Army_Dico",
+    "Data.root.pAGE2.aRMY21.dataCode": "Year_of_Service_Army_Dico",
+    "Data.root.pAGE2.aRMY8.dataCode": "Army_Disciplinary_Dico",
+    "Data.root.pAGE2.aRMY9.dataCode": "Conviction_Army_Dico",
+    "Data.root.pAGE2.aRMY10.dataCode": "Arrest_Prison_Army_Dico",
+    "Data.root.pAGE2.aRMY11.dataCode": "Mental_Treatment_Army_Dico",
+    "Data.root.pAGE2.aRMY12.dataCode": "Mental_Release_Army_Dico",
+    "Data.root.pAGE2.jOB.dataCode": "Relevant_Job_Experience_Dico",
+    "Data.root.pAGE2.jOB2.dataCode": "Previous_Gius_Attempts_Dico",
+    "Data.root.pAGE2.jOB3.dataCode": "Number_of_Attempts_Num",
+    "Data.root.pAGE2.jOB4.dataCode": "Miun_Stop_Reason_Categor",
+    "Data.root.pAGE2.jOB5.dataCode": "Past_Permanent_Officer_Dico",
+    "Data.root.pAGE2.jOB6.dataCode": "Saham_Officer_Past_Dico",
+    "Data.root.pAGE2.jOB7.dataCode": "Past_Layoffs_Dico",
+    "Data.root.pAGE2.jOB8.dataCode": "Another_Job_Nomination_Dico",
+    "Data.root.pAGE2.jOB9.dataCode": "Max_Procedure_Duration_Num",
+    "Data.root.pAGE2.tAS1.dataCode": "Previous_Arrest_Dico",
+    "Data.root.pAGE2.tAS2.dataCode": "Criminal_Record_Dico",
+    "Data.root.pAGE2.tAS3.dataCode": "Conviction_in_Court_Dico",
+    "Data.root.pAGE2.tAS4.dataCode": "Light_Drugs_Dico",
+    "Data.root.pAGE2.tAS5.dataCode": "Light_Drugs_Last_Use_Num",
+    "Data.root.pAGE2.tAS6.dataCode": "Hard_Drugs_Dico",
+    "Data.root.pAGE2.tAS7.dataCode": "Hard_Drugs_Last_Use_Num",
+    "Data.root.pAGE2.tAS8.dataCode": "Drinking_Alcohol_Frequ_Num",
+    "Data.root.pAGE2.tAS9.dataCode": "Gambling_Frequ_Num",
+    "Data.root.pAGE2.tAS10.dataCode": "Unemployment_Dico",
+    "Data.root.pAGE2.tAS11.dataCode": "Financial_Difficulties_Dico",
+    "Data.root.pAGE2.tAS12.dataCode": "Pshitat_Regel_Dico",
+    "Data.root.pAGE2.tAS13.dataCode": "Debts_Dico",
+    "Data.root.pAGE2.bRI.dataCode": "Physical_Fitness_Frequ_Num",
+    "Data.root.pAGE2.bRI2": "Height_Num",
+    "Data.root.pAGE2.bRI3": "Weight_Num",
+    "Data.root.pAGE2.bRI4.dataCode": "Cigarettes_Dico",
+    "Data.root.pAGE2.bRI5.dataCode": "Cigarettes_Num",
+    "Data.root.pAGE2.bRI6.dataCode": "Chronic_Disease_Dico",
+    "Data.root.pAGE2.bRI7.dataCode": "Physical_Limitations_Dico",
+    "Data.root.pAGE2.bRI8.dataCode": "Mental_Difficulties_Dico",
+    "Data.root.pAGE2.bRI9.dataCode": "Psychiatric_Drugs_Dico",
+    "Data.root.pAGE3.gIYUS1.dataCode": "Volunteering_Dico",
+    "Data.root.pAGE3.gIYUS12.dataCode": "Volunteering_Scope_Num",
+    "Data.root.pAGE3.gIYUS.dataCode": "Service_Period_Commitment_Dico",
+    "Data.root.pAGE3.gIYUS2.dataCode": "Work_Perceived_Maching_Num",
+    "Data.root.pAGE3.gIYUS5.dataCode": "Previous_Job_Salary_Num",
+    "Data.root.pAGE3.gIYUS6.dataCode": "Salary_Expectations_Num",
+    "ProcessInstance.ReferenceNumber": "Index_Real",
+    "Data.root.pAGE2.mAIL": "Mail",
+    "Data.root.pAGE2.iD": "ID_Num",
+    "Data.root.pAGE2.lN": "First_Name",
+    "Data.root.pAGE2.fN": "Last_Name",
+    "ספורט":"Sport",
+    "בריאות":"Healt",
+    "בישול":"Cooking",
+    "פעילות התנדבותית":"Volunteering",
+    "פסיכולוגיה":"Psychology",
+    "ספרות":"Literature",
+    "פוליטיקה":"Politics",
+    "קולנוע":"Theater",
+    "ניהול אורח חיים בריא":"Managing_Healthy_Lifestyle",
+    "גלישה באינטרנט":"Web_Surfing",
+    "הימורים":"Gambling",
+    "טבע וטיולים":"Nature_and_Trips",
+    "טכנולוגיה ומחשבים":"Technology_and_Computers",
+    "כלכלה":"Economy",
+    "מדע":"Science",
+    "מפגשים עם חברים":"Meeting_With_Friends",
+    "בילויים במסיבות / ברים":"Enjoy_Parties_Bars",
+    "אקטואליה":"Actuavlia",
+    "אומנות":"Art",
+    "כלי נשק":"Weapons",
+    "פעילות מיסטית":"Mistic_Activity",
+    "מוזיקה":"Music",
+    "ספורט אתגרי":"Extreme_Sports",
+    "אפשרות לנהל ולפקד":"Manage_and_Command",
+    "האתגר והעניין בעבודה":"Challenging_Interesting_Work",
+    "תנאים סוציאליים ורווחה":"Social_Benefits",
+    "רצון להעניק סיוע לאזרחים":"Assistance_to_Citizens",
+    "אפשרות להתפתחות מקצועית ואישית":"Personal_Development",
+    "תרומת עבודת השוטר לחברה":"Contribution_to_Society",
+    "המלצה של המשפחה/חברים":"Recommendation",
+    "יציבות תעסוקתית":"Employment_Stability",
+    "השכר":"Good_Salary",
+    "אפשרות להילחם בפשיעה":"Crime_Fighting",
+    "אינטראקציה עם אנשים":"Interaction_With_People",
+    "הגיוון בעבודה":"Diversity_at_Work",
+    "מיקום נוח של יחידת השירות":"Convenient_Work_Location",
+    "ברירת מחדל":"Default_Employment",
+    "אפשרות ללבוש מדים":"Wearing_Uniform",
+    "האפשרות להפעיל כוח במסגרת התפקיד":"Use_Force",
+    "היכולת להפעיל סמכות":"Exercise_Authority",
+    "התדמית המכובדת של העבודה":"Respectable_Job",
+    "שעות עבודה נוחות":"Convenient_Working_Hours",
+    "תפקיד המאפשר עצמאות ואוטונומיה":"Independence_and_Autonomy",
+    
+}
+
+filtered_dataframe.rename(columns=column_mapping, inplace=True)
+# Get the current column names
+column_names = filtered_dataframe.columns.tolist()
+
+# Update the name of the 6th column from the right
+column_names[-6] = "The_Action_In_Work"
+
+# Assign the updated column names back to the DataFrame
+filtered_dataframe.columns = column_names
+# Assuming filtered_dataframe is your DataFrame
+
+# Replace values in the "Married_Dico" column
+replacement_dict = {"widower": "0", "Single": "0", "divorcee": "0", "Married": "1"}
+filtered_dataframe["Married_Dico"].replace(replacement_dict, inplace=True)
+import pandas as pd
+
+# Assuming your DataFrame is named filtered_dataframe
+# Identify columns ending with "Dico" and replace 2 with 0
+dico_columns = [col for col in filtered_dataframe.columns if col.endswith("Dico")]
+
+# Replace 2 with 0 in identified columns
+filtered_dataframe[dico_columns] = filtered_dataframe[dico_columns].replace(2, 0)
+import pandas as pd
+
+# Assuming your DataFrame is named filtered_dataframe
+# Check for columns with words starting with a lowercase letter
+selected_columns = filtered_dataframe.columns[filtered_dataframe.columns.str.contains(r'\b[a-z]', regex=True)]
+Handling missing values
+df = pd.DataFrame(filtered_dataframe)
+# Assuming df_train is your data frame
+df = df.drop_duplicates(subset='ID_Num')
+df["Number_of_Attempts_Num"].fillna(0, inplace=True)
+import pandas as pd
+
+# Create a new variable "Masters_Degree_Average_up_84" based on conditions
+
+df["Masters_Degree_Average_up_84_Dico"] = 0  # Default value is set to 0
+
+# Update values based on conditions
+df.loc[df["Masters_Degree_Average_Num"].between(9, 12, inclusive=True), "Masters_Degree_Average_up_84_Dico"] = 1
+import pandas as pd
+
+# Assuming your DataFrame is named df
+# Create a new variable "Psyc_Test_600_Up" based on conditions
+df["Psyc_Test_600_Up_Dico"] = 0  # Default value is set to 0
+
+# Update values based on conditions
+df.loc[df["Psyc_Test_Grade_Num"].between(9, 12, inclusive=True), "Psyc_Test_600_Up_Dico"] = 1
+# Assuming your DataFrame is named df
+# Create a new variable "Psyc_Test_600_Up" based on conditions
+df["Psyc_Test_450_600_Dico"] = 0  # Default value is set to 0
+
+# Update values based on conditions
+df.loc[df["Psyc_Test_Grade_Num"].between(6, 8, inclusive=True), "Psyc_Test_450_600_Dico"] = 1
+# Assuming your DataFrame is named df
+# Create a new variable "Psyc_Test_600_Up" based on conditions
+df["Psyc_Test_450_Less_Dico"] = 0  # Default value is set to 0
+
+# Update values based on conditions
+df.loc[df["Psyc_Test_Grade_Num"].between(1, 5, inclusive=True), "Psyc_Test_450_Less_Dico"] = 1
+# Assuming your DataFrame is named df
+# Create a new variable "Psyc_Test_600_Up" based on conditions
+df["Kaba_Grade_55_UP_Dico"] = 0  # Default value is set to 0
+
+# Update values based on conditions
+df.loc[df["Kaba_Grade_Army_Num"].between(15, 17, inclusive=True), "Kaba_Grade_55_UP_Dico"] = 1
+# Assuming your DataFrame is named df
+# Create a new variable "Psyc_Test_600_Up" based on conditions
+df["Kaba_Grade_51_54_Dico"] = 0  # Default value is set to 0
+
+# Update values based on conditions
+df.loc[df["Kaba_Grade_Army_Num"].between(12, 14, inclusive=True), "Kaba_Grade_51_54_Dico"] = 1
+# Assuming your DataFrame is named df
+# Create a new variable "Psyc_Test_600_Up" based on conditions
+df["Kaba_Grade_46_Less_Dico"] = 0  # Default value is set to 0
+
+# Update values based on conditions
+df.loc[df["Kaba_Grade_Army_Num"].between(1, 6, inclusive=True), "Kaba_Grade_46_Less_Dico"] = 1
+# Assuming your DataFrame is named df
+# Create a new variable "Psyc_Test_600_Up" based on conditions
+df["Kaba_Grade_51_Up_Dico"] = 0  # Default value is set to 0
+
+# Update values based on conditions
+df.loc[df["Kaba_Grade_Army_Num"].between(12, 17, inclusive=True), "Kaba_Grade_51_Up_Dico"] = 1
+
+
+# Assuming your DataFrame is named df
+# Create a new variable "Psyc_Test_600_Up" based on conditions
+df["Dapar_Grade_7_Up_Dico"] = 0  # Default value is set to 0
+
+# Update values based on conditions
+df.loc[df["Dapar_Grade_Army_Num"].between(8, 10, inclusive=True), "Dapar_Grade_7_Up_Dico"] = 1
+# Assuming your DataFrame is named df
+# Create a new variable "Psyc_Test_600_Up" based on conditions
+df["Dapar_Grade_3_Less_Dico"] = 0  # Default value is set to 0
+
+# Update values based on conditions
+df.loc[df["Dapar_Grade_Army_Num"].between(2, 4, inclusive=True), "Dapar_Grade_3_Less_Dico"] = 1
+
+# Assuming your DataFrame is named df
+# Create a new variable "Psyc_Test_600_Up" based on conditions
+df["Light_Drugs_Last_Year_Dico"] = 0  # Default value is set to 0
+
+# Update values based on conditions
+df.loc[df["Light_Drugs_Last_Use_Num"].between(1, 1, inclusive=True), "Light_Drugs_Last_Year_Dico"] = 1
+# Assuming your DataFrame is named df
+# Create a new variable "Psyc_Test_600_Up" based on conditions
+df["Graduation_Average_60_Less_Dico"] = 0  # Default value is set to 0
+
+# Update values based on conditions
+df.loc[df["Graduation_Average_Num"].between(2, 5, inclusive=True), "Graduation_Average_60_Less_Dico"] = 1
+# Assuming your DataFrame is named df
+# Create a new variable "Psyc_Test_600_Up" based on conditions
+df["Graduation_Average_85_Up_Dico"] = 0  # Default value is set to 0
+
+# Update values based on conditions
+df.loc[df["Graduation_Average_Num"].between(9, 11, inclusive=True), "Graduation_Average_85_Up_Dico"] = 1
+
+# Assuming your DataFrame is named df
+# Create a new variable "Psyc_Test_600_Up" based on conditions
+df["English_4_5_Units_Num_Dico"] = 0  # Default value is set to 0
+
+# Update values based on conditions
+df.loc[df["English_Units_Num"].between(3, 4, inclusive=True), "English_4_5_Units_Num_Dico"] = 1
+# Assuming your DataFrame is named df
+# Create a new variable "Psyc_Test_600_Up" based on conditions
+df["English_3_Units_Num_Dico"] = 0  # Default value is set to 0
+
+# Update values based on conditions
+df.loc[df["English_Units_Num"].between(2, 2, inclusive=True), "English_3_Units_Num_Dico"] = 1
+
+# Assuming your DataFrame is named df
+# Create a new variable "Psyc_Test_600_Up" based on conditions
+df["Math_4_5_Units_Num_Dico"] = 0  # Default value is set to 0
+
+# Update values based on conditions
+df.loc[df["Math_Units_Num"].between(3, 4, inclusive=True), "Math_4_5_Units_Num_Dico"] = 1
+# Assuming your DataFrame is named df
+# Create a new variable "Psyc_Test_600_Up" based on conditions
+df["Math_3_Units_Num_Dico"] = 0  # Default value is set to 0
+
+# Update values based on conditions
+df.loc[df["Math_Units_Num"].between(2, 2, inclusive=True), "Math_3_Units_Num_Dico"] = 1
+
+# Assuming your DataFrame is named df
+# Create a new variable "Psyc_Test_600_Up" based on conditions
+df["Volunteering_3_Up_Week_Dico"] = 0  # Default value is set to 0
+
+# Update values based on conditions
+df.loc[df["Volunteering_Scope_Num"].between(4, 6, inclusive=True), "Volunteering_3_Up_Week_Dico"] = 1
+# Assuming your DataFrame is named df
+# Create a new variable "Psyc_Test_600_Up" based on conditions
+df["Cigarettes_11_Up_Dico"] = 0  # Default value is set to 0
+
+# Update values based on conditions
+df.loc[df["Cigarettes_Num"].between(3, 4, inclusive=True), "Cigarettes_11_Up_Dico"] = 1
+
+# Assuming your DataFrame is named df
+# Create a new variable "Psyc_Test_600_Up" based on conditions
+df["Academic_Education_Dico"] = 0  # Default value is set to 0
+
+# Update values based on conditions
+df.loc[df["Current_Education_Categor"].between(3, 6, inclusive=True), "Academic_Education_Dico"] = 1
+# Assuming your DataFrame is named df
+# Create a new variable "Psyc_Test_600_Up" based on conditions
+df["No_Bagrut_Dico"] = 0  # Default value is set to 0
+
+# Update values based on conditions
+df.loc[df["Current_Education_Categor"].between(1, 1, inclusive=True), "No_Bagrut_Dico"] = 1
+# Assuming your DataFrame is named df
+# Create a new variable "Psyc_Test_600_Up" based on conditions
+df["Arab_Muslim_Cristian"] = 0  # Default value is set to 0
+
+# Update values based on conditions
+df.loc[df["Minority_Type_Categor"].between(4, 5, inclusive=True), "Arab_Muslim_Cristian"] = 1
+# Assuming your DataFrame is named df
+# Create a new variable "Psyc_Test_600_Up" based on conditions
+df["Prisha_Yezoma_on_Last_Attempt_Dico"] = 0  # Default value is set to 0
+
+# Update values based on conditions
+df.loc[df["Miun_Stop_Reason_Categor"].between(7, 7, inclusive=True), "Prisha_Yezoma_on_Last_Attempt_Dico"] = 1
+# Assuming your DataFrame is named df
+# Create a new variable "Psyc_Test_600_Up" based on conditions
+df["Evaluation_Center_Filed_Last_Attempt_Dico"] = 0  # Default value is set to 0
+
+# Update values based on conditions
+df.loc[df["Miun_Stop_Reason_Categor"].between(2, 2, inclusive=True), "Evaluation_Center_Filed_Last_Attempt_Dico"] = 1
+# Assuming your DataFrame is named df
+# Create a new variable "Psyc_Test_600_Up" based on conditions
+df["Dapar_Hebrew_Failurer_Last_Attempt_Dico"] = 0  # Default value is set to 0
+
+# Update values based on conditions
+df.loc[df["Miun_Stop_Reason_Categor"].between(1, 1, inclusive=True), "Dapar_Hebrew_Failurer_Last_Attempt_Dico"] = 1
+# Assuming your DataFrame is named df
+# Create a new variable "Psyc_Test_600_Up" based on conditions
+df["Sacham_officer_Dico"] = 0  # Default value is set to 0
+
+# Update values based on conditions
+df.loc[df["Service_Type_Categor"].between(2, 2, inclusive=True), "Sacham_officer_Dico"] = 1
+# Assuming your DataFrame is named df
+# Create a new variable "Psyc_Test_600_Up" based on conditions
+df["Combat_Service_Army_Dico"] = 0  # Default value is set to 0
+
+# Update values based on conditions
+df.loc[df["Role_Type_Army_Categor"].between(1, 1, inclusive=True), "Combat_Service_Army_Dico"] = 1
+# List of variables
+variable_list = {"Date", "Index", "ID_Num", "First_Name", "Last_Name", "Gender_Dico", "Married_Dico", "Nation_Dico", "Minority_Dico", "Relevant_Job_Experience_Dico", "Previous_Gius_Attempts_Dico", "Past_Permanent_Officer_Dico", "Saham_Officer_Past_Dico", "Past_Layoffs_Dico", "Another_Job_Nomination_Dico", "Previous_Arrest_Dico", "Criminal_Record_Dico", "Conviction_in_Court_Dico", "Light_Drugs_Dico", "Hard_Drugs_Dico", "Unemployment_Dico", "Financial_Difficulties_Dico", "Pshitat_Regel_Dico", "Debts_Dico", "Cigarettes_Dico", "Chronic_Disease_Dico", "Physical_Limitations_Dico", "Mental_Difficulties_Dico", "Psychiatric_Drugs_Dico", "Volunteering_Dico", "Service_Period_Commitment_Dico", "Do_Psyc_Test_Dico", "Relevant_Education_Dico", "Commander_Army_Dico", "Kazin_Army_Dico", "Special_Unit_Army_Dico", "Mechina_Before_Army_Dico", "Year_of_Service_Army_Dico", "Army_Disciplinary_Dico", "Conviction_Army_Dico", "Arrest_Prison_Army_Dico", "Mental_Treatment_Army_Dico", "Mental_Release_Army_Dico", "Age_Num", "Achievements_Preception_Num", "Hebrew_1_Expressive_Num", "Hebrew_2_Vocabulary_Num", "Hebrew_3_Writing_Num", "Hebrew_4_Reading_Num", "Hebrew_5_Proofreading_Num", "Psych_Tests_Subjective_Num", "Temper_Control_1_Num", "Temper_Control_2_Num", "Temper_Control_3_Num", "Temper_Control_4_Num", "Temper_Control_5_Num", "Max_Procedure_Duration_Num", "Drinking_Alcohol_Frequ_Num", "Gambling_Frequ_Num", "Physical_Fitness_Frequ_Num", "Height_Num", "Weight_Num", "Work_Perceived_Maching_Num", "Previous_Job_Salary_Num", "Salary_Expectations_Num", "Number_of_Attempts_Num", "Masters_Degree_Average_up_84_Dico", "Psyc_Test_600_Up_Dico", "Psyc_Test_450_600_Dico", "Psyc_Test_450_Less_Dico", "Kaba_Grade_55_UP_Dico", "Kaba_Grade_51_54_Dico", "Kaba_Grade_46_Less_Dico", "Dapar_Grade_7_Up_Dico", "Dapar_Grade_3_Less_Dico", "Light_Drugs_Last_Year_Dico", "Graduation_Average_60_Less_Dico", "Graduation_Average_85_Up_Dico", "English_4_5_Units_Num_Dico", "English_3_Units_Num_Dico", "Math_4_5_Units_Num_Dico", "Math_3_Units_Num_Dico", "Volunteering_3_Up_Week_Dico", "Cigarettes_11_Up_Dico", "Academic_Education_Dico", "No_Bagrut_Dico", "Arab_Muslim_Cristian", "Sacham_officer_Dico", "Combat_Service_Army_Dico", "Prisha_Yezoma_on_Last_Attempt_Dico", "Evaluation_Center_Filed_Last_Attempt_Dico", "Dapar_Hebrew_Failurer_Last_Attempt_Dico", "Role_Type_Army_Categor", "Service_Type_Categor", "Miun_Stop_Reason_Categor", "Minority_Type_Categor", "Current_Education_Categor", "Graduation_Average_Num", "Math_Units_Num", "English_Units_Num", "Bachelors_Degree_Average_Num", "Volunteering_Scope_Num", "Cigarettes_Num", "Hard_Drugs_Last_Use_Num", "Light_Drugs_Last_Use_Num", "Dapar_Grade_Army_Num", "Kaba_Grade_Army_Num", "Psyc_Test_Grade_Num", "Masters_Degree_Average_Num", "Mail"}
+
+# Check variables that do not exist in df
+missing_variables = variable_list - set(df.columns)
+print("Variables that do not exist in df:", missing_variables)
+
+# Check variables in df that do not appear in the list
+extra_variables = set(df.columns) - variable_list
+print("Variables in df that do not appear in the list:", extra_variables)
+Variables that do not exist in df: set()
+Variables in df that do not appear in the list: {'Psychology', 'Crime_Fighting', 'Respectable_Job', 'Volunteering', 'Kaba_Grade_51_Up_Dico', 'Employment_Stability', 'Assistance_to_Citizens', 'Index_Real', 'Healt', 'Challenging_Interesting_Work', 'Actuavlia', 'Economy', 'The_Action_In_Work', 'Managing_Healthy_Lifestyle', 'Contribution_to_Society', 'Social_Benefits', 'Exercise_Authority', 'Personal_Development', 'Theater', 'Interaction_With_People', 'Independence_and_Autonomy', 'Technology_and_Computers', 'Good_Salary', 'Music', 'Enjoy_Parties_Bars', 'Use_Force', 'Convenient_Work_Location', 'Literature', 'Sport', 'Convenient_Working_Hours', 'Extreme_Sports', 'Cooking', 'Art', 'Manage_and_Command', 'Diversity_at_Work', 'Web_Surfing', 'Meeting_With_Friends', 'Default_Employment', 'Science', 'Politics', 'Nature_and_Trips', 'Gambling', 'Wearing_Uniform', 'Recommendation'}
+# List of variables in the desired order
+desired_order = ["Date", "Index", "Index_Real", "ID_Num", "First_Name", "Last_Name", "Mail", "Gender_Dico", "Married_Dico", "Nation_Dico", "Minority_Dico", "Relevant_Job_Experience_Dico", "Previous_Gius_Attempts_Dico", "Past_Permanent_Officer_Dico", "Saham_Officer_Past_Dico", "Past_Layoffs_Dico", "Another_Job_Nomination_Dico", "Previous_Arrest_Dico", "Criminal_Record_Dico", "Conviction_in_Court_Dico", "Light_Drugs_Dico", "Hard_Drugs_Dico", "Unemployment_Dico", "Financial_Difficulties_Dico", "Pshitat_Regel_Dico", "Debts_Dico", "Cigarettes_Dico", "Chronic_Disease_Dico", "Physical_Limitations_Dico", "Mental_Difficulties_Dico", "Psychiatric_Drugs_Dico", "Volunteering_Dico", "Service_Period_Commitment_Dico", "Do_Psyc_Test_Dico", "Relevant_Education_Dico", "Commander_Army_Dico", "Kazin_Army_Dico", "Special_Unit_Army_Dico", "Mechina_Before_Army_Dico", "Year_of_Service_Army_Dico", "Army_Disciplinary_Dico", "Conviction_Army_Dico", "Arrest_Prison_Army_Dico", "Mental_Treatment_Army_Dico", "Mental_Release_Army_Dico", "Age_Num", "Achievements_Preception_Num", "Hebrew_1_Expressive_Num", "Hebrew_2_Vocabulary_Num", "Hebrew_3_Writing_Num", "Hebrew_4_Reading_Num", "Hebrew_5_Proofreading_Num", "Psych_Tests_Subjective_Num", "Temper_Control_1_Num", "Temper_Control_2_Num", "Temper_Control_3_Num", "Temper_Control_4_Num", "Temper_Control_5_Num", "Max_Procedure_Duration_Num", "Drinking_Alcohol_Frequ_Num", "Gambling_Frequ_Num", "Physical_Fitness_Frequ_Num", "Height_Num", "Weight_Num", "Work_Perceived_Maching_Num", "Previous_Job_Salary_Num", "Salary_Expectations_Num", "Number_of_Attempts_Num", "Masters_Degree_Average_up_84_Dico", "Psyc_Test_600_Up_Dico", "Psyc_Test_450_600_Dico", "Psyc_Test_450_Less_Dico", "Kaba_Grade_55_UP_Dico", "Kaba_Grade_51_54_Dico", "Kaba_Grade_46_Less_Dico", "Kaba_Grade_51_Up_Dico", "Dapar_Grade_7_Up_Dico", "Dapar_Grade_3_Less_Dico", "Light_Drugs_Last_Year_Dico", "Graduation_Average_60_Less_Dico", "Graduation_Average_85_Up_Dico", "English_4_5_Units_Num_Dico", "English_3_Units_Num_Dico", "Math_4_5_Units_Num_Dico", "Math_3_Units_Num_Dico", "Volunteering_3_Up_Week_Dico", "Cigarettes_11_Up_Dico", "Academic_Education_Dico", "No_Bagrut_Dico", "Arab_Muslim_Cristian", "Sacham_officer_Dico", "Combat_Service_Army_Dico", "Prisha_Yezoma_on_Last_Attempt_Dico", "Evaluation_Center_Filed_Last_Attempt_Dico", "Dapar_Hebrew_Failurer_Last_Attempt_Dico", 'Healt', 'Crime_Fighting', 'Convenient_Working_Hours', 'The_Action_In_Work', 'Music', 'Use_Force', 'Default_Employment', 'Psychology', 'Diversity_at_Work', 'Manage_and_Command', 'Sport', 'Art', 'Extreme_Sports', 'Meeting_With_Friends', 'Contribution_to_Society', 'Web_Surfing', 'Economy', 'Assistance_to_Citizens', 'Independence_and_Autonomy', 'Recommendation', 'Wearing_Uniform', 'Challenging_Interesting_Work', 'Volunteering', 'Actuavlia', 'Cooking', 'Enjoy_Parties_Bars', 'Personal_Development', 'Employment_Stability', 'Science', 'Nature_and_Trips', 'Good_Salary', 'Politics', 'Managing_Healthy_Lifestyle', 'Convenient_Work_Location', 'Gambling', 'Literature', 'Respectable_Job', 'Exercise_Authority', 'Technology_and_Computers', 'Interaction_With_People', 'Theater', 'Social_Benefits', "Role_Type_Army_Categor", "Service_Type_Categor", "Miun_Stop_Reason_Categor", "Minority_Type_Categor", "Current_Education_Categor", "Graduation_Average_Num", "Math_Units_Num", "English_Units_Num", "Bachelors_Degree_Average_Num", "Volunteering_Scope_Num", "Cigarettes_Num", "Hard_Drugs_Last_Use_Num", "Light_Drugs_Last_Use_Num", "Dapar_Grade_Army_Num", "Kaba_Grade_Army_Num", "Psyc_Test_Grade_Num", "Masters_Degree_Average_Num"]
+
+# Reorder columns in df
+df = df[desired_order]
+df.head()
+               Date  Index  Index_Real     ID_Num First_Name Last_Name  \
+0  21/08/2023 14:44      1        5439   37107588          *         *   
+1  17/08/2023 09:37      2        5403  211968169          *         *   
+2  17/08/2023 07:43      3        5395  340866375          *         *   
+3  17/08/2023 07:34      4        5391  206253106          *         *   
+4  17/08/2023 07:45      5        5398  310274717          *         *   
+
+                        Mail  Gender_Dico Married_Dico  Nation_Dico  ...  \
+0  Roei.zami@mail.huji.ac.il          1.0            1            1  ...   
+1     Adimarko6309@gmail.com          1.0            0            1  ...   
+2       ntordjman3@gmail.com          1.0            1            1  ...   
+3       Yardenza26@gmail.com          1.0            0            1  ...   
+4      basalov1710@yahoo.com          1.0            1            1  ...   
+
+   English_Units_Num  Bachelors_Degree_Average_Num  Volunteering_Scope_Num  \
+0                4.0                          10.0                     NaN   
+1                NaN                           NaN                     NaN   
+2                2.0                           NaN                     NaN   
+3                NaN                           NaN                     NaN   
+4                NaN                           NaN                     NaN   
+
+   Cigarettes_Num  Hard_Drugs_Last_Use_Num  Light_Drugs_Last_Use_Num  \
+0             NaN                      NaN                       NaN   
+1             NaN                      NaN                       NaN   
+2             NaN                      NaN                       NaN   
+3             NaN                      NaN                       1.0   
+4             NaN                      NaN                       NaN   
+
+   Dapar_Grade_Army_Num  Kaba_Grade_Army_Num  Psyc_Test_Grade_Num  \
+0                   9.0                 15.0                  NaN   
+1                   7.0                 15.0                 10.0   
+2                   1.0                  1.0                  NaN   
+3                   7.0                  9.0                  NaN   
+4                   1.0                  1.0                  4.0   
+
+   Masters_Degree_Average_Num  
+0                        11.0  
+1                         NaN  
+2                         NaN  
+3                         NaN  
+4                         NaN  
+
+[5 rows x 154 columns]
+# Identify columns ending with '_Dico'
+dico_columns = [col for col in df.columns if col.endswith('_Dico')]
+
+# Replace missing values with 0 in _Dico columns
+df[dico_columns] = df[dico_columns].fillna(0)
+# Identify columns ending with '_Num'
+num_columns = [col for col in df.columns if col.endswith('_Num')]
+
+# Replace missing values with the mean in _Num columns
+df[num_columns] = df[num_columns].fillna(df[num_columns].mean())
+
+# Display the modified data frame
+#print(df)
+# Identify columns ending with '_Categor'
+Categor_columns = [col for col in df.columns if col.endswith('_Categor')]
+
+# Replace missing values with 999 in Categor columns
+df[Categor_columns] = df[Categor_columns].fillna(999)
+# Check for missing values in each column of df
+missing_values = df.isnull().sum()
+
+# Extract variables with missing values
+variables_with_missing_values = missing_values[missing_values > 0]
+# List of variables for which to calculate the average
+expressive_variables = [
+    'Hebrew_1_Expressive_Num',
+    'Hebrew_2_Vocabulary_Num',
+    'Hebrew_3_Writing_Num',
+    'Hebrew_4_Reading_Num',
+    'Hebrew_5_Proofreading_Num'
+]
+
+# Create a new column 'Hebrew_Meam_Num' containing the average of the specified variables
+df['Hebrew_Meam_Num'] = df[expressive_variables].mean(axis=1)
+
+# Display the modified data frame
+#print(df)
+# List of variables for which to calculate the average
+Temp_variables = [
+    'Temper_Control_1_Num',
+    'Temper_Control_2_Num',
+    'Temper_Control_3_Num',
+    'Temper_Control_4_Num',
+    'Temper_Control_5_Num'
+]
+
+# Create a new column 'Temp_Mean_Num' containing the average of the specified variables
+df['Temp_Mean_Num'] = df[Temp_variables].mean(axis=1)
+
+# Display the modified data frame
+#print(df)
+# Set the minimum and maximum limits
+min_limit = 100
+max_limit = 220
+
+# Replace values outside the specified range with 173
+df['Height_Num'] = df['Height_Num'].apply(lambda x: 173 if x < min_limit or x > max_limit else x)
+
+# Display the modified data frame
+#print(df)
+# Set the minimum and maximum limits
+min_limit = 30
+max_limit = 150
+
+# Replace values outside the specified range with 73
+df['Weight_Num'] = df['Weight_Num'].apply(lambda x: 73 if x < min_limit or x > max_limit else x)
+
+# Display the modified data frame
+#print(df)
+# Set the minimum and maximum limits
+min_limit = 18
+max_limit = 65
+
+# Replace values outside the specified range with 27
+df['Age_Num'] = df['Age_Num'].apply(lambda x: 27 if x < min_limit or x > max_limit else x)
+
+# Display the modified data frame
+#print(df)
+df['BMI_Num'] = df.Weight_Num / (df.Height_Num * df.Height_Num / 10000)
+# Set the minimum and maximum limits
+min_limit = 15
+max_limit = 50
+
+# Replace values outside the specified range with 50
+df['BMI_Num'] = df['BMI_Num'].apply(lambda x: 50 if x > max_limit else max(min(x, max_limit), min_limit))
+# Set the thresholds for different BMI categories
+underweight_threshold = 18.5
+normal_threshold = 24.9999999
+overweight_threshold = 29.9999999
+
+# Create new dichotomous variables
+df['Underweight_BMI_Dumi'] = (df['BMI_Num'] <= underweight_threshold).astype(int)
+df['Normal_BMI_Dumi'] = ((df['BMI_Num'] >= underweight_threshold) & (df['BMI_Num'] <= normal_threshold)).astype(int)
+df['Overweight_BMI_Dumi'] = ((df['BMI_Num'] >= normal_threshold) & (df['BMI_Num'] <= overweight_threshold)).astype(int)
+df['Obesity_BMI_Dumi'] = (df['BMI_Num'] >= overweight_threshold).astype(int)
+
+# Display the modified data frame
+#print(df)
+Feature Engineering & Enrichment
+---- Gibushon Final Grade ----
+Education_and_Inteligence_Index - Combine Variable
+df['Dapar_Grade_3_Less_Dico_Rotated'] = df['Dapar_Grade_3_Less_Dico'] ^ 1
+df['Education_and_Inteligence_Index'] = df.Dapar_Grade_3_Less_Dico_Rotated + df.Academic_Education_Dico + df.Graduation_Average_85_Up_Dico + df.Graduation_Average_60_Less_Dico
+Volunteering_Dico_Index - Combine Variable
+df['Volunteering_Dico_Index'] = df.Volunteering_Dico + (df.Volunteering_3_Up_Week_Dico * 2)
+Psyc_Test_Index - Combine Variable
+df['All_One'] = 1
+df['Psyc_Test_Index'] = df.All_One - df.Psyc_Test_450_Less_Dico + (df.Psyc_Test_450_600_Dico * 1) + (df.Psyc_Test_600_Up_Dico * 2)
+Job_Motivators_Index - Combine Variable
+Job_Motivators_Corr = pd.DataFrame(df, columns=["Use_Force", "Independence_and_Autonomy", "Wearing_Uniform", "Social_Benefits","Exercise_Authority", "Default_Employment", "Respectable_Job", "Good_Salary", "Convenient_Working_Hours", "Personal_Development", "Contribution_to_Society", "Challenging_Interesting_Work", "Crime_Fighting", "Evaluation_Center_Target"])
+df['Job_Motivators_Index'] = df.Use_Force *-0.0486 + df.Independence_and_Autonomy * -0.160562 + df.Wearing_Uniform *-0.174265 + df.Social_Benefits * -0.089402 + df.Exercise_Authority * -0.109815 + df.Default_Employment * -0.128360 + df.Respectable_Job * -0.129551 + df.Good_Salary * -0.133278 + df.Convenient_Working_Hours *  -0.061196 + df.Personal_Development * 0.104857 + df.Contribution_to_Society * 0.211846 + df.Challenging_Interesting_Work * 0.189582 + df.Crime_Fighting * 0.177240
+Misconduct_Index - Combine Variable
+df['Misconduct_Index'] = df.Conviction_in_Court_Dico + df.Criminal_Record_Dico + df.Army_Disciplinary_Dico
+United_Commander_or_Kazin - Combine Variable
+df['United_Commander_or_Kazin'] = df.Commander_Army_Dico + df.Kazin_Army_Dico
+United_Employment_Problems - Combine Variable
+df['Financial_Difficulties_Dico_Rotated'] = df['Financial_Difficulties_Dico'] ^ 1
+df['United_Employment_Problems'] = df.Financial_Difficulties_Dico_Rotated + df.Unemployment_Dico
+class_counts_U_E_P = df['United_Employment_Problems'].value_counts()
+###print(class_counts_U_E_P)
+Small_Class_Dico_Index - Combine Variable
+df['Small_Class_Dico_Index'] = df.Relevant_Education_Dico + df.Kaba_Grade_51_54_Dico + df.Past_Permanent_Officer_Dico + df.Underweight_BMI_Dumi + df.Another_Job_Nomination_Dico
+Interests_and_Activities_Index - Combine Variable
+df['Science_Rotated'] = df['Science'] ^ 1
+df['Technology_and_Computers_Rotated'] = df['Technology_and_Computers'] ^ 1
+df['Art_Rotated'] = df['Art'] ^ 1
+df['Interests_and_Activities_Index'] = df.Science_Rotated + df.Technology_and_Computers_Rotated + df.Art_Rotated + df.Theater + df.Cooking + df.Volunteering
+class_counts_Interests_and_Activities_Index = df['Interests_and_Activities_Index'].value_counts()
+###print(class_counts_Interests_and_Activities_Index)
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Gold List
+Gibushon_Sofi_Gold_List = pd.DataFrame(df, columns=["ID_Num", "Education_and_Inteligence_Index", "Job_Motivators_Index", "United_Commander_or_Kazin", "Interests_and_Activities_Index", "Age_Num", "Hebrew_Meam_Num", "Temp_Mean_Num"])
+Change Lists Variables Type
+for col in Gibushon_Sofi_Gold_List:
+    if col in Gibushon_Sofi_Gold_List.columns:
+        Gibushon_Sofi_Gold_List[col] = Gibushon_Sofi_Gold_List[col].astype(np.float64)
+Drop Missing Values
+Gibushon_Sofi_Gold_List = Gibushon_Sofi_Gold_List.dropna()
+---- Rama Grade ----
+Educational achievement index - Combine Variable
+df['Rama_Educational_achievement_index'] = df.Graduation_Average_85_Up_Dico + df.English_4_5_Units_Num_Dico + df.Math_4_5_Units_Num_Dico + df.Academic_Education_Dico + df.Psyc_Test_600_Up_Dico
+United_Commander_or_Kazin - Combine Variable
+df['Rama_United_Commander_or_Kazin'] = df.Commander_Army_Dico + df.Kazin_Army_Dico
+Misconduct_Index - Combine Variable
+df['Rama_Index_Criminal_History'] = df.Previous_Arrest_Dico + df.Criminal_Record_Dico + df.Army_Disciplinary_Dico + df.Arrest_Prison_Army_Dico + df.Conviction_Army_Dico
+Temp_Mean_Num
+# List of variables for which to calculate the average
+Rama_Temp_variables = [
+    'Temper_Control_2_Num',
+    'Temper_Control_5_Num'
+]
+
+# Create a new column 'Temp_Mean_Num' containing the average of the specified variables
+df['Rama_Temp_Mean_Num'] = df[Rama_Temp_variables].mean(axis=1)
+
+# Display the modified data frame
+#print(df)
+Job_Motivators_Index - Combine Variable
+df['Rama_Job_Motivators_Index'] = df.Wearing_Uniform * -0.097382 + df.Good_Salary * -0.065341 + df.Exercise_Authority * -0.080737 + df.Respectable_Job * -0.112960 + df.Challenging_Interesting_Work * 0.072071 + df.Convenient_Working_Hours * -0.072850 + df.Contribution_to_Society * 0.085553 + df.The_Action_In_Work * -0.097059 + df.Personal_Development * 0.075 + df.Interaction_With_People * 0.075
+Interests_and_Activities_Index - Combine Variable
+df['Rama_Interests_and_Activities_Index'] = df.Meeting_With_Friends * 0.097476 + df.Technology_and_Computers * -0.074211 + df.Theater * -0.095627 + df.Actuavlia * 0.066915 + df.Psychology * 0.051 + df.Managing_Healthy_Lifestyle * 0.051
+Gold List
+Rama_Sofi_Gold_List = pd.DataFrame(df, columns=["ID_Num", "Rama_Educational_achievement_index", "Rama_United_Commander_or_Kazin", "Rama_Index_Criminal_History", "Sacham_officer_Dico", "Married_Dico", "Drinking_Alcohol_Frequ_Num", "Work_Perceived_Maching_Num", "Rama_Temp_Mean_Num", "Number_of_Attempts_Num"])
+Change Lists Variables Type
+for col in Rama_Sofi_Gold_List:
+    if col in Rama_Sofi_Gold_List.columns:
+        Rama_Sofi_Gold_List[col] = Rama_Sofi_Gold_List[col].astype(np.float64)
+Drop Missing Values
+Rama_Sofi_Gold_List = Rama_Sofi_Gold_List.dropna()
+---- Dapar Grade ----
+Educational achievement index - Combine Variable
+df['Dapar_Educational_achievement_index'] = df.Graduation_Average_85_Up_Dico + df.English_4_5_Units_Num_Dico + df.Math_4_5_Units_Num_Dico + df.Academic_Education_Dico + df.Psyc_Test_600_Up_Dico
+Psych_Tests_Subjective_Num
+class_counts_Psych_Tests_Subjective_Num = df['Psych_Tests_Subjective_Num'].value_counts()
+###print(class_counts_Psych_Tests_Subjective_Num)
+Job_Motivators_Index - Combine Variable
+df['Dapar_Job_Motivators_Index'] = df.Personal_Development * 0.158877 + df.The_Action_In_Work * -0.134249 + df.Diversity_at_Work * 0.139854 + df.Assistance_to_Citizens *-0.105701 + df.Wearing_Uniform * -0.107838  + df.Crime_Fighting * 0.082 + df.Challenging_Interesting_Work * 0.098153  + df.Contribution_to_Society * 0.063  + df.Good_Salary * -0.063  + df.Convenient_Working_Hours * -0.081352 + df.Exercise_Authority * -0.054  + df.Use_Force * -0.098919
+Interests_and_Activities_Index - Combine Variable
+df['Dapar_Interests_and_Activities_Index'] = df.Science * 0.132 + df.Economy * 0.132 + df.Cooking * -0.1278 + df.Art * -0.105 + df.Actuavlia * 0.110 + df.Meeting_With_Friends * 0.076 + df.Psychology * 0.100 + df.Web_Surfing * 0.065 + df.Technology_and_Computers * 0.077
+Gold List
+Dapar_Sofi_Gold_List = pd.DataFrame(df, columns=["ID_Num","Dapar_Educational_achievement_index", "Psych_Tests_Subjective_Num", "Kaba_Grade_51_54_Dico", "Kaba_Grade_55_UP_Dico", "Married_Dico", "Special_Unit_Army_Dico", "Dapar_Job_Motivators_Index", "Dapar_Interests_and_Activities_Index", "Dapar_Hebrew_Failurer_Last_Attempt_Dico"])
+Change Lists Variables Type
+for col in Dapar_Sofi_Gold_List:
+    if col in Dapar_Sofi_Gold_List.columns:
+        Dapar_Sofi_Gold_List[col] = Dapar_Sofi_Gold_List[col].astype(np.float64)
+Drop Missing Values
+Dapar_Sofi_Gold_List = Dapar_Sofi_Gold_List.dropna()
+---- Hebrew Grade ----
+Educational achievement index - Combine Variable
+df['Heb_Educational_achievement_index'] = df.Graduation_Average_85_Up_Dico + df.English_4_5_Units_Num_Dico + df.Math_4_5_Units_Num_Dico + df.Academic_Education_Dico + df.Psyc_Test_600_Up_Dico
+Job_Motivators_Index - Combine Variable
+df['Heb_Job_Motivators_Index'] = df.Personal_Development * 0.206 + df.Convenient_Working_Hours * -0.199 + df.Wearing_Uniform * -0.178 + df.Good_Salary *-0.176 + df.The_Action_In_Work * -0.170  + df.Contribution_to_Society * 0.151 + df.Use_Force * -0.150  + df.Interaction_With_People * 0.125  + df.Challenging_Interesting_Work * 0.119  + df.Diversity_at_Work * 0.114 + df.Exercise_Authority * -0.054  + df.Exercise_Authority * -0.108
+Interests_and_Activities_Index - Combine Variable
+df['Heb_Interests_and_Activities_Index'] = df.Actuavlia * 0.24 + df.Politics * 0.175 + df.Sport * -0.128 + df.Literature * 0.109 + df.Meeting_With_Friends * 0.095 + df.Art * -0.093 + df.Psychology * 0.068 + df.Enjoy_Parties_Bars * -0.065 + df.Extreme_Sports * -0.077 + df.Gambling * -0.081
+Gold List
+Heb_Sofi_Gold_List = pd.DataFrame(df, columns=["ID_Num", "Heb_Educational_achievement_index", "Hebrew_Meam_Num", "Service_Period_Commitment_Dico", "Age_Num", "Sacham_officer_Dico", "Dapar_Hebrew_Failurer_Last_Attempt_Dico", "Evaluation_Center_Filed_Last_Attempt_Dico", "Max_Procedure_Duration_Num", "Work_Perceived_Maching_Num", "Heb_Job_Motivators_Index", "Heb_Interests_and_Activities_Index"])
+Change Lists Variables Type
+for col in Heb_Sofi_Gold_List:
+    if col in Heb_Sofi_Gold_List.columns:
+        Heb_Sofi_Gold_List[col] = Heb_Sofi_Gold_List[col].astype(np.float64)
+Drop Missing Values
+Heb_Sofi_Gold_List = Heb_Sofi_Gold_List.dropna()
+---- Normot Test Grade ----
+Job_Motivators_Index - Combine Variable
+df['Normot_Job_Motivators_Index'] = df.The_Action_In_Work * 0.158 + df.Default_Employment * 0.130 + df.Employment_Stability * -0.129 + df.Exercise_Authority *0.119 + df.Contribution_to_Society * -0.105  + df.Wearing_Uniform * 0.097 + df.Good_Salary * 0.090  + df.Personal_Development * -0.089  + df.Independence_and_Autonomy * 0.075  + df.Use_Force * 0.069
+Interests_and_Activities_Index - Combine Variable
+df['Normot_Interests_and_Activities_Index'] = df.Literature * -0.135 + df.Enjoy_Parties_Bars * 0.108 + df.Gambling * 0.097
+Gold List
+Normot_Sofi_Gold_List = pd.DataFrame(df, columns=["ID_Num", "Hebrew_Meam_Num", "Work_Perceived_Maching_Num", "Number_of_Attempts_Num", "Nation_Dico", "Previous_Job_Salary_Num", "Salary_Expectations_Num", "Mental_Difficulties_Dico", "Normot_Job_Motivators_Index", "Normot_Interests_and_Activities_Index"])
+Change Lists Variables Type
+for col in Normot_Sofi_Gold_List:
+    if col in Normot_Sofi_Gold_List.columns:
+        Normot_Sofi_Gold_List[col] = Normot_Sofi_Gold_List[col].astype(np.float64)
+Drop Missing Values
+Normot_Sofi_Gold_List = Normot_Sofi_Gold_List.dropna()
+---- Personality Disqualification ----
+Job_Motivators_Index - Combine Variable
+df['Personality_Dis_Job_Motivators_Index'] = df.Convenient_Working_Hours * -1.121235 + df.Assistance_to_Citizens * -0.619778 + df.Employment_Stability * 0.48454 + df.Interaction_With_People * 0.258155 + df.Wearing_Uniform * 0.52356  + df.Recommendation * 0.349112 + df.Contribution_to_Society * -0.206432  + df.The_Action_In_Work * -0.375042  + df.Crime_Fighting * -0.365593
+Gold List
+Personality_Diss_Sofi_Gold_List = pd.DataFrame(df, columns=["ID_Num", "Salary_Expectations_Num", "United_Commander_or_Kazin", "Psyc_Test_450_600_Dico", "Psyc_Test_450_Less_Dico", "Psyc_Test_600_Up_Dico", "Math_4_5_Units_Num_Dico", "Combat_Service_Army_Dico", "Chronic_Disease_Dico", "Relevant_Job_Experience_Dico", "Work_Perceived_Maching_Num", "Gender_Dico", "Actuavlia", "Max_Procedure_Duration_Num", "Saham_Officer_Past_Dico", "Nation_Dico"])
+Change Lists Variables Type
+for col in Personality_Diss_Sofi_Gold_List:
+    if col in Personality_Diss_Sofi_Gold_List.columns:
+        Personality_Diss_Sofi_Gold_List[col] = Personality_Diss_Sofi_Gold_List[col].astype(np.float64)
+Drop Missing Values
+Personality_Diss_Sofi_Gold_List = Personality_Diss_Sofi_Gold_List.dropna()
+---- Gibushon Grade Gold List ----
+Job_Motivators_Index - Combine Variable
+df['Gibushon_Job_Motivators_Index'] = df.Contribution_to_Society * 0.172069  + df.Independence_and_Autonomy * -0.183738  + df.Crime_Fighting * 0.182454  + df.Challenging_Interesting_Work * 0.159587  + df.Good_Salary * -0.153263  + df.Personal_Development * 0.118235  + df.Diversity_at_Work * 0.069619  + df.Employment_Stability * 0.074453  + df.Convenient_Working_Hours *  -0.042256 + df.Convenient_Work_Location * -0.056902  + df.Use_Force *  -0.057798 + df.Exercise_Authority * -0.094080  + df.Social_Benefits * -0.088683  + df.Default_Employment * -0.120173  + df.Respectable_Job *   + df.Wearing_Uniform *  -0.097522
+df['Gibushon_Job_Interests_and_Activities_Index'] = df.Cooking * 0.182 + df.Extreme_Sports * 0.075 + df.Technology_and_Computers * -0.072 + df.Nature_and_Trips * -0.074 + df.Gambling * -0.085 + df.Science * -0.117
+Gold List
+Gibushon_Grade_Sofi_Gold_List = pd.DataFrame(df, columns=["ID_Num", "Psyc_Test_Index", "Gibushon_Job_Motivators_Index", "United_Commander_or_Kazin", "Age_Num", "Hebrew_1_Expressive_Num", "Gibushon_Job_Interests_and_Activities_Index"])
+Gibushon_Grade_Sofi_Gold_List
+Change Lists Variables Type
+for col in Gibushon_Grade_Sofi_Gold_List:
+    if col in Gibushon_Grade_Sofi_Gold_List.columns:
+        Gibushon_Grade_Sofi_Gold_List[col] = Gibushon_Grade_Sofi_Gold_List[col].astype(np.float64)
+Drop Missing Values
+Gibushon_Grade_Sofi_Gold_List = Gibushon_Grade_Sofi_Gold_List.dropna()
+Gibushon_Grade_Sofi_Gold_List
+---- Gius Result Gold List ----
+Gius_Target
+df['Gius_Interests_and_Activities_Index'] = df.Exercise_Authority * -0.812 + df.Personal_Development * 0.335 + df.Diversity_at_Work * 0.239749 + df.Contribution_to_Society * 0.181659 + df.Convenient_Work_Location * 0.320472  + df.Respectable_Job * -0.193094 + df.Good_Salary * -0.585902  + df.The_Action_In_Work * -0.377658  + df.Manage_and_Command * -0.349456
+df['Gius_Job_Motivators_Index'] = df.Enjoy_Parties_Bars * -0.726507 + df.Technology_and_Computers * -0.502814 + df.Meeting_With_Friends * 0.336094 + df.Actuavlia * 0.39675 + df.Healt * 0.254358 + df.Volunteering * 0.391669 + df.Cooking * 0.21451 + df.Managing_Healthy_Lifestyle * 0.173105 + df.Psychology * -0.212941 + df.Science * -0.315026 + df.Theater * -0.312719
+Gold List
+Gius_Sofi_Gold_List = pd.DataFrame(df, columns=["ID_Num", "United_Commander_or_Kazin","Work_Perceived_Maching_Num","Saham_Officer_Past_Dico","Misconduct_Index","Number_of_Attempts_Num","Psychiatric_Drugs_Dico","Achievements_Preception_Num","Physical_Fitness_Frequ_Num","Weight_Num","Gius_Interests_and_Activities_Index","Gius_Job_Motivators_Index"])
+Change Lists Variables Type
+for col in Gius_Sofi_Gold_List:
+    if col in Gius_Sofi_Gold_List.columns:
+        Gius_Sofi_Gold_List[col] = Gius_Sofi_Gold_List[col].astype(np.float64)
+Drop Missing Values
+Gius_Sofi_Gold_List = Gius_Sofi_Gold_List.dropna()
+---- Final_Gibushon_Dico ----
+Gold List
+Final_Gibushon_Dico_Gold_List = pd.DataFrame(df, columns=["ID_Num", "Hebrew_1_Expressive_Num","United_Commander_or_Kazin","Misconduct_Index","English_3_Units_Num_Dico","Job_Motivators_Index","Interests_and_Activities_Index","Previous_Job_Salary_Num","Psychiatric_Drugs_Dico","Evaluation_Center_Filed_Last_Attempt_Dico","Year_of_Service_Army_Dico", "Number_of_Attempts_Num"])
+Change Lists Variables Type
+for col in Final_Gibushon_Dico_Gold_List:
+    if col in Final_Gibushon_Dico_Gold_List.columns:
+        Final_Gibushon_Dico_Gold_List[col] = Final_Gibushon_Dico_Gold_List[col].astype(np.float64)
+Drop Missing Values
+Final_Gibushon_Dico_Gold_List = Final_Gibushon_Dico_Gold_List.dropna()
+Make predictions on the new data
+Gibushon Final Grade
+#Gibushon_Sofi_Gold_List
+import pandas as pd
+import joblib
+import pandas as pd
+import joblib
+
+# Load the model from the file
+Gibushon_Sofi_loaded_model = joblib.load('Gibushon_Final_Model_Linear_Regression.pkl')
+
+# Assuming Gibushon_Sofi_Gold_List is a DataFrame with "ID_Num" as the index column
+# Drop the "ID_Num" column from the input data
+Gibushon_Sofi_Gold_List_without_index = Gibushon_Sofi_Gold_List.drop('ID_Num', axis=1)
+
+# Use the loaded model to make predictions on the new data
+y_Gibushon_Final_Grade = Gibushon_Sofi_loaded_model.predict(Gibushon_Sofi_Gold_List_without_index)
+
+# Create a DataFrame with the predictions
+df_gibushon_Sofi = pd.DataFrame(y_Gibushon_Final_Grade, index=Gibushon_Sofi_Gold_List.index, columns=['Predicted_Gibushon_Final_Grade'])
+
+# Merge the "ID_Num" index variable back into the DataFrame
+df_gibushon_Sofi['ID_Num'] = Gibushon_Sofi_Gold_List.ID_Num
+
+# Save the DataFrame to a CSV file
+df_gibushon_Sofi.to_csv('predicted_grades_with_id.csv', index=False)
+
+# Print the DataFrame or use it as needed
+print(df_gibushon_Sofi)
+      Predicted_Gibushon_Final_Grade       ID_Num
+0                           3.017762   37107588.0
+1                           3.124436  211968169.0
+2                           3.377852  340866375.0
+3                           2.204261  206253106.0
+4                           3.202141  310274717.0
+...                              ...          ...
+2486                        3.453804  318256278.0
+2488                        1.455752   21939632.0
+2492                        3.652308   39169396.0
+2493                        3.563517   57501777.0
+2494                        3.747548   32794695.0
+
+[2249 rows x 2 columns]
+Rama
+import pandas as pd
+import joblib
+import pandas as pd
+import joblib
+
+# Load the model from the file
+Rama_loaded_model = joblib.load('Rama_Final_Model_Linear_Regression.pkl')
+
+# Assuming Gibushon_Sofi_Gold_List is a DataFrame with "ID_Num" as the index column
+# Drop the "ID_Num" column from the input data
+Rama_Gold_List_without_index = Rama_Sofi_Gold_List.drop('ID_Num', axis=1)
+
+# Use the loaded model to make predictions on the new data
+y_Rama_Final_Grade = Rama_loaded_model.predict(Rama_Gold_List_without_index)
+
+# Create a DataFrame with the predictions
+df_Rama_final_grade = pd.DataFrame(y_Rama_Final_Grade, index=Rama_Sofi_Gold_List.index, columns=['Predicted_Rama'])
+
+# Merge the "ID_Num" index variable back into the DataFrame
+df_Rama_final_grade['ID_Num'] = Rama_Sofi_Gold_List.ID_Num
+
+# Save the DataFrame to a CSV file
+df_Rama_final_grade.to_csv('predicted_grades_with_id.csv', index=False)
+
+# Print the DataFrame or use it as needed
+print(df_Rama_final_grade)
+      Predicted_Rama       ID_Num
+0           4.498049   37107588.0
+1           3.885744  211968169.0
+2           3.923235  340866375.0
+3           3.519422  206253106.0
+4           3.500886  310274717.0
+...              ...          ...
+2486        3.549957  318256278.0
+2488        3.730371   21939632.0
+2492        4.222785   39169396.0
+2493        4.501958   57501777.0
+2494        4.661801   32794695.0
+
+[2249 rows x 2 columns]
+Dapar
+import pandas as pd
+import joblib
+import pandas as pd
+import joblib
+
+# Load the model from the file
+Dapar_loaded_model = joblib.load('Dapar_Final_Model_Linear_Regression.pkl')
+
+# Assuming Dapar_Sofi_Gold_List is a DataFrame with "ID_Num" as the index column
+# Drop the "ID_Num" column from the input data
+Dapar_Gold_List_without_index = Dapar_Sofi_Gold_List.drop('ID_Num', axis=1)
+
+# Use the loaded model to make predictions on the new data
+y_Dapar_Final_Grade = Dapar_loaded_model.predict(Dapar_Gold_List_without_index)
+
+# Create a DataFrame with the predictions
+df_Dapar_final_grade = pd.DataFrame(y_Dapar_Final_Grade, index=Dapar_Sofi_Gold_List.index, columns=['Predicted_Dapar'])
+
+# Merge the "ID_Num" index variable back into the DataFrame
+df_Dapar_final_grade['ID_Num'] = Dapar_Sofi_Gold_List.ID_Num
+
+# Save the DataFrame to a CSV file
+df_Dapar_final_grade.to_csv('predicted_grades_with_id.csv', index=False)
+
+# Print the DataFrame or use it as needed
+print(df_Dapar_final_grade)
+      Predicted_Dapar       ID_Num
+0            8.440772   37107588.0
+1            5.669301  211968169.0
+2            4.599727  340866375.0
+3            3.664198  206253106.0
+4            4.812698  310274717.0
+...               ...          ...
+2486         4.041847  318256278.0
+2488         6.080236   21939632.0
+2492         6.655761   39169396.0
+2493         7.505658   57501777.0
+2494         8.358370   32794695.0
+
+[2249 rows x 2 columns]
+Hebrew
+import pandas as pd
+import joblib
+import pandas as pd
+import joblib
+
+# Load the model from the file
+Hebrew_loaded_model = joblib.load('Hebrew_Final_Model_Linear_Regression.pkl')
+
+# Assuming Heb_Sofi_Gold_List is a DataFrame with "ID_Num" as the index column
+# Drop the "ID_Num" column from the input data
+Hebrew_Gold_List_without_index = Heb_Sofi_Gold_List.drop('ID_Num', axis=1)
+
+# Use the loaded model to make predictions on the new data
+y_Hebrew_Final_Grade = Hebrew_loaded_model.predict(Hebrew_Gold_List_without_index)
+
+# Create a DataFrame with the predictions
+df_Hebrew_final_grade = pd.DataFrame(y_Hebrew_Final_Grade, index=Heb_Sofi_Gold_List.index, columns=['Predicted_Hebrew'])
+
+# Merge the "ID_Num" index variable back into the DataFrame
+df_Hebrew_final_grade['ID_Num'] = Heb_Sofi_Gold_List.ID_Num
+
+# Save the DataFrame to a CSV file
+df_Hebrew_final_grade.to_csv('predicted_grades_with_id.csv', index=False)
+
+# Print the DataFrame or use it as needed
+print(df_Hebrew_final_grade)
+      Predicted_Hebrew       ID_Num
+0             8.211801   37107588.0
+1             7.221064  211968169.0
+2             6.484300  340866375.0
+3             6.730235  206253106.0
+4             7.126990  310274717.0
+...                ...          ...
+2486          7.405397  318256278.0
+2488          7.184134   21939632.0
+2492          8.282882   39169396.0
+2493          8.167654   57501777.0
+2494          8.410011   32794695.0
+
+[2249 rows x 2 columns]
+Normot
+import pandas as pd
+import joblib
+import pandas as pd
+import joblib
+
+# Load the model from the file
+Normot_loaded_model = joblib.load('Normot_Final_Model_Linear_Regression.pkl')
+
+# Assuming Normot_Sofi_Gold_List is a DataFrame with "ID_Num" as the index column
+# Drop the "ID_Num" column from the input data
+Normot_Gold_List_without_index = Normot_Sofi_Gold_List.drop('ID_Num', axis=1)
+
+# Use the loaded model to make predictions on the new data
+y_Normot_Final_Grade = Normot_loaded_model.predict(Normot_Gold_List_without_index)
+
+# Create a DataFrame with the predictions
+df_Normot_final_grade = pd.DataFrame(y_Normot_Final_Grade, index=Normot_Sofi_Gold_List.index, columns=['Predicted_Normot'])
+
+# Merge the "ID_Num" index variable back into the DataFrame
+df_Normot_final_grade['ID_Num'] = Normot_Sofi_Gold_List.ID_Num
+
+# Save the DataFrame to a CSV file
+df_Normot_final_grade.to_csv('predicted_grades_with_id.csv', index=False)
+
+# Print the DataFrame or use it as needed
+print(df_Normot_final_grade)
+      Predicted_Normot       ID_Num
+0             0.658843   37107588.0
+1             0.589567  211968169.0
+2             1.925971  340866375.0
+3             2.104191  206253106.0
+4             0.866551  310274717.0
+...                ...          ...
+2486          2.402527  318256278.0
+2488          5.656580   21939632.0
+2492          0.686932   39169396.0
+2493          1.304140   57501777.0
+2494          0.031614   32794695.0
+
+[2249 rows x 2 columns]
+Personality Diss
+import pandas as pd
+import joblib
+import pandas as pd
+import joblib
+
+# Load the model and cutoff point from the file
+(Personality_loaded_model, _) = joblib.load('Personality_Diss_Final_Model_L_R.pkl')
+
+# Assuming Personality_Diss_Sofi_Gold_List is a DataFrame with "ID_Num" as the index column
+# Drop the "ID_Num" column from the input data
+Personality_Gold_List_without_index = Personality_Diss_Sofi_Gold_List.drop('ID_Num', axis=1)
+
+# Use the loaded model to make predictions on the new data
+Personality_Diss_Gold_Model_Predictions = Personality_loaded_model.predict_proba(Personality_Gold_List_without_index)[:, 1]
+
+# Create a DataFrame with the predictions
+df_Personality_final_grade = pd.DataFrame(Personality_Diss_Gold_Model_Predictions, index=Personality_Diss_Sofi_Gold_List.index, columns=['Predicted_Personality_Diss'])
+
+# Merge the "ID_Num" index variable back into the DataFrame
+df_Personality_final_grade['ID_Num'] = Personality_Diss_Sofi_Gold_List.ID_Num
+
+# Save the DataFrame to a CSV file
+df_Personality_final_grade.to_csv('predicted_grades_with_id.csv', index=False)
+
+# Print the DataFrame or use it as needed
+print(df_Personality_final_grade)
+      Predicted_Personality_Diss       ID_Num
+0                       0.376663   37107588.0
+1                       0.046240  211968169.0
+2                       0.645981  340866375.0
+3                       0.116901  206253106.0
+4                       0.084223  310274717.0
+...                          ...          ...
+2486                    0.077222  318256278.0
+2488                    0.602197   21939632.0
+2492                    0.073946   39169396.0
+2493                    0.041709   57501777.0
+2494                    0.080315   32794695.0
+
+[2249 rows x 2 columns]
+df_Personality_final_grade
+      Predicted_Personality_Diss       ID_Num
+0                       0.376663   37107588.0
+1                       0.046240  211968169.0
+2                       0.645981  340866375.0
+3                       0.116901  206253106.0
+4                       0.084223  310274717.0
+...                          ...          ...
+2486                    0.077222  318256278.0
+2488                    0.602197   21939632.0
+2492                    0.073946   39169396.0
+2493                    0.041709   57501777.0
+2494                    0.080315   32794695.0
+
+[2249 rows x 2 columns]
+Gibushon Grade
+import pandas as pd
+import joblib
+import pandas as pd
+import joblib
+
+# Load the model and cutoff point from the file
+(Gibushon_loaded_model) = joblib.load('Gibushon_Grade_Model_Linear_Regression.pkl')
+
+# Drop the "ID_Num" column from the input data
+Gibushon_Gold_List_without_index = Gibushon_Grade_Sofi_Gold_List.drop('ID_Num', axis=1)
+
+# Assuming Gibushon_Grade_Sofi_Gold_List is a DataFrame with "ID_Num" as the index column
+
+# Use the loaded model to make predictions on the new data
+y_Gibushon_Final_Grade = Gibushon_loaded_model.predict(Gibushon_Gold_List_without_index)
+
+# Create a DataFrame with the predictions
+df_Gibushon_grade = pd.DataFrame(y_Gibushon_Final_Grade, index=Gibushon_Grade_Sofi_Gold_List.index, columns=['Predicted_Gibushon_Grade'])
+
+# Merge the "ID_Num" index variable back into the DataFrame
+df_Gibushon_grade['ID_Num'] = Gibushon_Grade_Sofi_Gold_List.ID_Num
+
+# Save the DataFrame to a CSV file
+df_Gibushon_grade.to_csv('predicted_grades_with_id.csv', index=False)
+
+# Print the DataFrame or use it as needed
+print(df_Gibushon_grade)
+      Predicted_Gibushon_Grade       ID_Num
+0                     3.032249   37107588.0
+1                     3.489384  211968169.0
+2                     3.044592  340866375.0
+3                     2.794325  206253106.0
+4                     3.250757  310274717.0
+...                        ...          ...
+2486                  2.884404  318256278.0
+2488                  1.826283   21939632.0
+2492                  3.660230   39169396.0
+2493                  4.192437   57501777.0
+2494                  3.545976   32794695.0
+
+[2249 rows x 2 columns]
+Gius Result
+import pandas as pd
+import joblib
+import pandas as pd
+import joblib
+
+# Load the model and cutoff point from the file
+(Gius_loaded_model, _) = joblib.load('Gius_Final_Model_L_R.pkl')
+
+# Assuming Gius_Sofi_Gold_List is a DataFrame with "ID_Num" as the index column
+# Drop the "ID_Num" column from the input data
+Gius_Gold_List_without_index = Gius_Sofi_Gold_List.drop('ID_Num', axis=1)
+
+# Use the loaded model to make predictions on the new data
+Gius_Gold_Model_Predictions = Gius_loaded_model.predict_proba(Gius_Gold_List_without_index)[:, 1]
+
+# Create a DataFrame with the predictions
+df_Gius_Results = pd.DataFrame(Gius_Gold_Model_Predictions, index=Gius_Sofi_Gold_List.index, columns=['Predicted_Gius_Result'])
+
+# Merge the "ID_Num" index variable back into the DataFrame
+df_Gius_Results['ID_Num'] = Gius_Sofi_Gold_List.ID_Num
+
+# Save the DataFrame to a CSV file
+df_Gius_Results.to_csv('predicted_grades_with_id.csv', index=False)
+
+# Print the DataFrame or use it as needed
+print(df_Gius_Results)
+      Predicted_Gius_Result       ID_Num
+0                  0.712949   37107588.0
+1                  0.422558  211968169.0
+2                  0.080023  340866375.0
+3                  0.332841  206253106.0
+4                  0.025533  310274717.0
+...                     ...          ...
+2486               0.365384  318256278.0
+2488               0.010061   21939632.0
+2492               0.528705   39169396.0
+2493               0.310964   57501777.0
+2494               0.737548   32794695.0
+
+[2249 rows x 2 columns]
+Gius Result
+import pandas as pd
+import joblib
+import pandas as pd
+import joblib
+
+# Load the model and cutoff point from the file
+(Evaluation_Center_Dico_loaded_model, _) = joblib.load('Model_Logistic_Regression.pkl')
+
+# Assuming Final_Gibushon_Dico_Gold_List  is a DataFrame with "ID_Num" as the index column
+# Drop the "ID_Num" column from the input data
+Evaluation_Center_Dico_Gold_List_without_index = Final_Gibushon_Dico_Gold_List .drop('ID_Num', axis=1)
+
+# Use the loaded model to make predictions on the new data
+Evaluation_Center_Dico_Gold_Model_Predictions = Evaluation_Center_Dico_loaded_model.predict_proba(Evaluation_Center_Dico_Gold_List_without_index)[:, 1]
+
+# Create a DataFrame with the predictions
+df_Evaluation_Center_Dico_Results = pd.DataFrame(Evaluation_Center_Dico_Gold_Model_Predictions, index=Final_Gibushon_Dico_Gold_List.index, columns=['Predicted_Evaluation_Center_Dico'])
+
+# Merge the "ID_Num" index variable back into the DataFrame
+df_Evaluation_Center_Dico_Results['ID_Num'] = Final_Gibushon_Dico_Gold_List .ID_Num
+
+# Save the DataFrame to a CSV file
+df_Evaluation_Center_Dico_Results.to_csv('predicted_grades_with_id.csv', index=False)
+
+# Print the DataFrame or use it as needed
+print(df_Evaluation_Center_Dico_Results)
+      Predicted_Evaluation_Center_Dico       ID_Num
+0                             0.552567   37107588.0
+1                             0.717931  211968169.0
+2                             0.601707  340866375.0
+3                             0.483772  206253106.0
+4                             0.272067  310274717.0
+...                                ...          ...
+2486                          0.752618  318256278.0
+2488                          0.016364   21939632.0
+2492                          0.693357   39169396.0
+2493                          0.710010   57501777.0
+2494                          0.694682   32794695.0
+
+[2249 rows x 2 columns]
+First Join
+Dataframe with all real target variables & models predictions
+import pandas as pd
+
+merged_df = pd.merge(df_gibushon_Sofi, df_Rama_final_grade, on='ID_Num', how='outer')
+merged_df = pd.merge(merged_df, df_Dapar_final_grade, on='ID_Num', how='outer')
+merged_df = pd.merge(merged_df, df_Hebrew_final_grade, on='ID_Num', how='outer')
+merged_df = pd.merge(merged_df, df_Normot_final_grade, on='ID_Num', how='outer')
+merged_df = pd.merge(merged_df, df_Personality_final_grade, on='ID_Num', how='outer')
+merged_df = pd.merge(merged_df, df_Gibushon_grade, on='ID_Num', how='outer')
+merged_df = pd.merge(merged_df, df_Evaluation_Center_Dico_Results, on='ID_Num', how='outer')
+merged_df = pd.merge(merged_df, df_Gius_Results, on='ID_Num', how='outer')
+
+# Display the merged data frame
+#merged_df
+#download_path = r'C:/Users/Knowl/Desktop/‏‏SADAC System Project/2Output/1Models Predictions and Tranjectories/Mid_Modles.xlsx'
+#merged_df.to_excel(download_path, index=False)
+
+#print(f"Excel file saved to: {download_path}")
+Models Impowerment - Models Predictions as Features
+Evaluation_Center_Target - Prediction Improvment
+import pandas as pd
+import statsmodels.api as sm
+
+Evaluation_Center_Target = pd.DataFrame(merged_df, columns=["ID_Num", 'Predicted_Gibushon_Final_Grade', "Predicted_Gibushon_Grade"])
+Evaluation_Center_Target.insert(0, 'const', 1)
+import pandas as pd
+import joblib
+
+# Load the model from the file
+Gibushon_Final_Grade_loaded_model = joblib.load('Gibushon_Final_Model_Improved.pkl')
+
+# Assuming Evaluation_Center_Target is a DataFrame with "ID_Num" as the index column
+# Drop the "ID_Num" column from the input data
+Evaluation_Center_Target_without_index = Evaluation_Center_Target.drop('ID_Num', axis=1)
+
+# Use the loaded model to make predictions on the new data
+y_Gibushon_Final_Grade = Gibushon_Final_Grade_loaded_model.predict(Evaluation_Center_Target_without_index)
+
+# Create a DataFrame with the predictions
+df_gibushon_final_New = pd.DataFrame(y_Gibushon_Final_Grade, index=Evaluation_Center_Target.index, columns=['Predicted_Gibushon_Final_Grade_New'])
+
+# Merge the "ID_Num" index variable back into the DataFrame
+df_gibushon_final_New['ID_Num'] = Evaluation_Center_Target.ID_Num
+
+# Save the DataFrame to a CSV file
+df_gibushon_final_New.to_csv('predicted_grades_with_id.csv', index=False)
+
+# Print df_gibushon_final DataFrame or use it as needed
+df_gibushon_final_New
+      Predicted_Gibushon_Final_Grade_New       ID_Num
+0                               3.107213   37107588.0
+1                               3.387140  211968169.0
+2                               3.310372  340866375.0
+3                               2.546464  206253106.0
+4                               3.314058  310274717.0
+...                                  ...          ...
+2244                            3.274339  318256278.0
+2245                            1.667510   21939632.0
+2246                            3.758979   39169396.0
+2247                            3.968252   57501777.0
+2248                            3.755766   32794695.0
+
+[2249 rows x 2 columns]
+Gibushon_Target - Prediction Improvment
+import pandas as pd
+import statsmodels.api as sm
+
+Gibushon_Target = pd.DataFrame(merged_df, columns=['ID_Num',"Predicted_Dapar", "Predicted_Gius_Result","Predicted_Gibushon_Grade"])
+Gibushon_Target.insert(0, 'const', 1)
+import pandas as pd
+import joblib
+
+# Load the model from the file
+Gibushon_Grade_loaded_model = joblib.load('Gibushon_Grade_Improved.pkl')
+
+# Assuming Evaluation_Center_Target is a DataFrame with "ID_Num" as the index column
+# Drop the "ID_Num" column from the input data
+Gibushon_Target_without_index = Gibushon_Target.drop('ID_Num', axis=1)
+
+# Use the loaded model to make predictions on the new data
+y_Gibushon_Final_Grade = Gibushon_Grade_loaded_model.predict(Gibushon_Target_without_index)
+
+# Create a DataFrame with the predictions
+df_gibushon_Grade_New = pd.DataFrame(y_Gibushon_Final_Grade, index=Gibushon_Target.index, columns=['Gibushon_Grade_Model_Linear_Regression_New'])
+
+# Merge the "ID_Num" index variable back into the DataFrame
+df_gibushon_Grade_New['ID_Num'] = Gibushon_Target.ID_Num
+
+# Save the DataFrame to a CSV file
+df_gibushon_Grade_New.to_csv('predicted_grades_with_id.csv', index=False)
+
+# Print df_gibushon_final DataFrame or use it as needed
+df_gibushon_Grade_New
+      Gibushon_Grade_Model_Linear_Regression_New       ID_Num
+0                                       3.057018   37107588.0
+1                                       2.787854  211968169.0
+2                                       2.027121  340866375.0
+3                                       1.992218  206253106.0
+4                                       2.142329  310274717.0
+...                                          ...          ...
+2244                                    2.128634  318256278.0
+2245                                    1.272529   21939632.0
+2246                                    3.119544   39169396.0
+2247                                    3.375904   57501777.0
+2248                                    3.430760   32794695.0
+
+[2249 rows x 2 columns]
+Rama_Target - Prediction Improvment
+import pandas as pd
+import statsmodels.api as sm
+
+Rama_Target = pd.DataFrame(merged_df, columns=['ID_Num',"Predicted_Rama", "Predicted_Personality_Diss","Predicted_Gibushon_Grade"])
+Rama_Target.insert(0, 'const', 1)
+import pandas as pd
+import joblib
+
+# Load the model from the file
+Rama_Model_Improved = joblib.load('Rama_Model_Improved.pkl')
+
+# Assuming Evaluation_Center_Target is a DataFrame with "ID_Num" as the index column
+# Drop the "ID_Num" column from the input data
+Rama_Target_without_index = Rama_Target.drop('ID_Num', axis=1)
+
+# Use the loaded model to make predictions on the new data
+y_Rama_Final_Grade = Rama_Model_Improved.predict(Rama_Target_without_index)
+
+# Create a DataFrame with the predictions
+df_Rama_Grade_New = pd.DataFrame(y_Rama_Final_Grade, index=Rama_Target.index, columns=['Predicted_Rama'])
+
+# Merge the "ID_Num" index variable back into the DataFrame
+df_Rama_Grade_New['ID_Num'] = Rama_Target.ID_Num
+
+# Save the DataFrame to a CSV file
+df_Rama_Grade_New.to_csv('predicted_grades_with_id.csv', index=False)
+
+# Print df_gibushon_final DataFrame or use it as needed
+df_Rama_Grade_New
+      Predicted_Rama       ID_Num
+0           4.544186   37107588.0
+1           3.895517  211968169.0
+2           4.175160  340866375.0
+3           3.457134  206253106.0
+4           3.516825  310274717.0
+...              ...          ...
+2244        3.481318  318256278.0
+2245        3.721314   21939632.0
+2246        4.253590   39169396.0
+2247        4.600385   57501777.0
+2248        4.633158   32794695.0
+
+[2249 rows x 2 columns]
+Dapar_Target - Prediction Improvment
+import pandas as pd
+import statsmodels.api as sm
+
+Dapar_Target = pd.DataFrame(merged_df, columns=['ID_Num',"Predicted_Dapar","Predicted_Gibushon_Grade"])
+Dapar_Target.insert(0, 'const', 1)
+import pandas as pd
+import joblib
+
+# Load the model from the file
+Dapar_Model_Improved = joblib.load('Dapar_Model_Improved.pkl')
+
+# Assuming Evaluation_Center_Target is a DataFrame with "ID_Num" as the index column
+# Drop the "ID_Num" column from the input data
+Dapar_Target_without_index = Dapar_Target.drop('ID_Num', axis=1)
+
+# Use the loaded model to make predictions on the new data
+y_Dapar_Final_Grade = Dapar_Model_Improved.predict(Dapar_Target_without_index)
+
+# Create a DataFrame with the predictions
+df_Dapar_Grade_New = pd.DataFrame(y_Dapar_Final_Grade, index=Dapar_Target.index, columns=['Predicted_Dapar'])
+
+# Merge the "ID_Num" index variable back into the DataFrame
+df_Dapar_Grade_New['ID_Num'] = Dapar_Target.ID_Num
+
+# Save the DataFrame to a CSV file
+df_Dapar_Grade_New.to_csv('predicted_grades_with_id.csv', index=False)
+
+# Print df_gibushon_final DataFrame or use it as needed
+df_Dapar_Grade_New
+      Predicted_Dapar       ID_Num
+0            8.494226   37107588.0
+1            5.740960  211968169.0
+2            4.567451  340866375.0
+3            3.565801  206253106.0
+4            4.822123  310274717.0
+...               ...          ...
+2244         3.968185  318256278.0
+2245         5.864237   21939632.0
+2246         6.780521   39169396.0
+2247         7.744939   57501777.0
+2248         8.501701   32794695.0
+
+[2249 rows x 2 columns]
+Hebrew_Target - Prediction Improvment
+import pandas as pd
+import statsmodels.api as sm
+
+Hebrew_Target = pd.DataFrame(merged_df, columns=['ID_Num',"Predicted_Hebrew","Predicted_Normot", "Predicted_Gibushon_Grade"])
+Hebrew_Target.insert(0, 'const', 1)
+import pandas as pd
+import joblib
+
+# Load the model from the file
+Hebrew_Model_Improved = joblib.load('Hebrew_Model_Improved.pkl')
+
+# Assuming Evaluation_Center_Target is a DataFrame with "ID_Num" as the index column
+# Drop the "ID_Num" column from the input data
+Hebrew_Target_without_index = Hebrew_Target.drop('ID_Num', axis=1)
+
+# Use the loaded model to make predictions on the new data
+y_Hebrew_Final_Grade = Hebrew_Model_Improved.predict(Hebrew_Target_without_index)
+
+# Create a DataFrame with the predictions
+df_Hebrew_Grade_New = pd.DataFrame(y_Hebrew_Final_Grade, index=Hebrew_Target.index, columns=['Predicted_Hebrew'])
+
+# Merge the "ID_Num" index variable back into the DataFrame
+df_Hebrew_Grade_New['ID_Num'] = Hebrew_Target.ID_Num
+
+# Save the DataFrame to a CSV file
+df_Hebrew_Grade_New.to_csv('predicted_grades_with_id.csv', index=False)
+
+# Print df_gibushon_final DataFrame or use it as needed
+df_Hebrew_Grade_New
+      Predicted_Hebrew       ID_Num
+0             8.269838   37107588.0
+1             7.526553  211968169.0
+2             6.519356  340866375.0
+3             6.643841  206253106.0
+4             7.343707  310274717.0
+...                ...          ...
+2244          7.154883  318256278.0
+2245          6.028181   21939632.0
+2246          8.423119   39169396.0
+2247          8.264788   57501777.0
+2248          8.667183   32794695.0
+
+[2249 rows x 2 columns]
+Normot_Target - Prediction Improvment
+import pandas as pd
+import statsmodels.api as sm
+
+Normot_Target = pd.DataFrame(merged_df, columns=['ID_Num','Predicted_Normot', "Predicted_Gibushon_Grade"])
+Normot_Target.insert(0, 'const', 1)
+Normot_Target
+      const       ID_Num  Predicted_Normot  Predicted_Gibushon_Grade
+0         1   37107588.0          0.658843                  3.032249
+1         1  211968169.0          0.589567                  3.489384
+2         1  340866375.0          1.925971                  3.044592
+3         1  206253106.0          2.104191                  2.794325
+4         1  310274717.0          0.866551                  3.250757
+...     ...          ...               ...                       ...
+2244      1  318256278.0          2.402527                  2.884404
+2245      1   21939632.0          5.656580                  1.826283
+2246      1   39169396.0          0.686932                  3.660230
+2247      1   57501777.0          1.304140                  4.192437
+2248      1   32794695.0          0.031614                  3.545976
+
+[2249 rows x 4 columns]
+import pandas as pd
+import joblib
+
+# Load the model from the file
+Normot_Model_Improved = joblib.load('Normot_Model_Improved.pkl')
+
+# Assuming Evaluation_Center_Target is a DataFrame with "ID_Num" as the index column
+# Drop the "ID_Num" column from the input data
+Normot_Target_without_index = Normot_Target.drop('ID_Num', axis=1)
+
+# Use the loaded model to make predictions on the new data
+y_Normot_Final_Grade = Normot_Model_Improved.predict(Normot_Target_without_index)
+
+# Create a DataFrame with the predictions
+df_Normot_Grade_New = pd.DataFrame(y_Normot_Final_Grade, index=Normot_Target.index, columns=['Predicted_Normot'])
+
+# Merge the "ID_Num" index variable back into the DataFrame
+df_Normot_Grade_New['ID_Num'] = Normot_Target.ID_Num
+
+# Save the DataFrame to a CSV file
+df_Normot_Grade_New.to_csv('predicted_grades_with_id.csv', index=False)
+
+# Print df_gibushon_final DataFrame or use it as needed
+df_Normot_Grade_New
+      Predicted_Normot       ID_Num
+0             0.688696   37107588.0
+1             0.441165  211968169.0
+2             1.812893  340866375.0
+3             2.073432  206253106.0
+4             0.784988  310274717.0
+...                ...          ...
+2244          2.302686  318256278.0
+2245          5.632622   21939632.0
+2246          0.458496   39169396.0
+2247          0.792221   57501777.0
+2248         -0.079061   32794695.0
+
+[2249 rows x 2 columns]
+Gius_Target - Prediction Improvment
+import pandas as pd
+import statsmodels.api as sm
+
+Gius_Target = pd.DataFrame(merged_df, columns=['ID_Num',"Predicted_Rama", "Predicted_Hebrew", "Predicted_Gius_Result"])
+Gius_Target.insert(0, 'const', 1)
+import pandas as pd
+import joblib
+
+# Load the model from the file
+Gius_Target_loaded_model = joblib.load('Gius_Results_Improved.pkl')
+
+# Assuming Evaluation_Center_Target is a DataFrame with "ID_Num" as the index column
+# Drop the "ID_Num" column from the input data
+Gius_Target_without_index = Gius_Target.drop('ID_Num', axis=1)
+
+# Use the loaded model to make predictions on the new data
+y_Gius_Final_Grade = Gius_Target_loaded_model.predict(Gius_Target_without_index)
+
+# Create a DataFrame with the predictions
+df_gius_Grade_New = pd.DataFrame(y_Gius_Final_Grade, index=Gius_Target.index, columns=['Gius_Results_Model_Linear_Regression_New'])
+
+# Merge the "ID_Num" index variable back into the DataFrame
+df_gius_Grade_New['ID_Num'] = Gius_Target.ID_Num
+
+# Save the DataFrame to a CSV file
+df_gius_Grade_New.to_csv('predicted_grades_with_id.csv', index=False)
+
+# Print df_gibushon_final DataFrame or use it as needed
+df_gius_Grade_New
+      Gius_Results_Model_Linear_Regression_New       ID_Num
+0                                     0.827512   37107588.0
+1                                     0.466486  211968169.0
+2                                     0.162982  340866375.0
+3                                     0.319897  206253106.0
+4                                     0.079699  310274717.0
+...                                        ...          ...
+2244                                  0.319556  318256278.0
+2245                                  0.086953   21939632.0
+2246                                  0.594436   39169396.0
+2247                                  0.386604   57501777.0
+2248                                  0.854754   32794695.0
+
+[2249 rows x 2 columns]
+Personality_Dis_Safek_Target - Prediction Improvment
+import pandas as pd
+import statsmodels.api as sm
+
+Personality_Dis_Safek_Target = pd.DataFrame(merged_df, columns=['ID_Num','Predicted_Personality_Diss', "Predicted_Gibushon_Final_Grade", "Predicted_Personality_Diss"])
+Personality_Dis_Safek_Target.insert(0, 'const', 1)
+import pandas as pd
+import joblib
+
+# Load the model from the file
+Personality_Dis_Target_loaded_model = joblib.load('Personality_Dis_Model_Improved.pkl')
+
+# Assuming Evaluation_Center_Target is a DataFrame with "ID_Num" as the index column
+# Drop the "ID_Num" column from the input data
+Personality_Dis_Target_without_index = Personality_Dis_Safek_Target.drop('ID_Num', axis=1)
+
+# Use the loaded model to make predictions on the new data
+y_Personality_Dis_Final_Grade = Personality_Dis_Target_loaded_model.predict(Personality_Dis_Target_without_index)
+
+# Create a DataFrame with the predictions
+df_Personality_Dis_New = pd.DataFrame(y_Personality_Dis_Final_Grade, index=Personality_Dis_Safek_Target.index, columns=['Personality_Dis_Model_Linear_Regression_New'])
+
+# Merge the "ID_Num" index variable back into the DataFrame
+df_Personality_Dis_New['ID_Num'] = Personality_Dis_Safek_Target.ID_Num
+
+# Save the DataFrame to a CSV file
+df_Personality_Dis_New.to_csv('predicted_grades_with_id.csv', index=False)
+
+# Print df_gibushon_final DataFrame or use it as needed
+df_Personality_Dis_New
+      Personality_Dis_Model_Linear_Regression_New       ID_Num
+0                                        0.452662   37107588.0
+1                                        0.166524  211968169.0
+2                                        0.699303  340866375.0
+3                                        0.257713  206253106.0
+4                                        0.186621  310274717.0
+...                                           ...          ...
+2244                                     0.172022  318256278.0
+2245                                     0.767201   21939632.0
+2246                                     0.162439   39169396.0
+2247                                     0.147886   57501777.0
+2248                                     0.162494   32794695.0
+
+[2249 rows x 2 columns]
+Final_Gibushon_Dico - Prediction Improvment
+import pandas as pd
+import statsmodels.api as sm
+
+Evaluation_Center_Dico_Target = pd.DataFrame(merged_df, columns=['ID_Num','Predicted_Hebrew', "Predicted_Gibushon_Grade"])
+Evaluation_Center_Dico_Target.insert(0, 'const', 1)
+import pandas as pd
+import joblib
+
+# Load the model from the file
+Final_Gibushon_Dico_Target_loaded_model = joblib.load('Final_Gibushon_Dico_Improved.pkl')
+
+# Assuming Evaluation_Center_Target is a DataFrame with "ID_Num" as the index column
+# Drop the "ID_Num" column from the input data
+Final_Gibushon_Dico_Target_without_index = Evaluation_Center_Dico_Target.drop('ID_Num', axis=1)
+
+# Use the loaded model to make predictions on the new data
+y_Final_Gibushon_Dico_Final_Grade = Final_Gibushon_Dico_Target_loaded_model.predict(Final_Gibushon_Dico_Target_without_index)
+
+# Create a DataFrame with the predictions
+df_Final_Gibushon_Dico_New = pd.DataFrame(y_Final_Gibushon_Dico_Final_Grade, index=Evaluation_Center_Dico_Target.index, columns=['Final_Gibushon_Dico_Improved'])
+
+# Merge the "ID_Num" index variable back into the DataFrame
+df_Final_Gibushon_Dico_New['ID_Num'] = Evaluation_Center_Dico_Target.ID_Num
+
+# Save the DataFrame to a CSV file
+df_Final_Gibushon_Dico_New.to_csv('predicted_grades_with_id.csv', index=False)
+
+# Print df_gibushon_final DataFrame or use it as needed
+df_Final_Gibushon_Dico_New
+      Final_Gibushon_Dico_Improved       ID_Num
+0                         0.719304   37107588.0
+1                         0.812919  211968169.0
+2                         0.528080  340866375.0
+3                         0.419802  206253106.0
+4                         0.708997  310274717.0
+...                            ...          ...
+2244                      0.552755  318256278.0
+2245                      0.094780   21939632.0
+2246                      0.914990   39169396.0
+2247                      0.970842   57501777.0
+2248                      0.898844   32794695.0
+
+[2249 rows x 2 columns]
+Models Impowerment Join
+import pandas as pd
+
+merged_df = pd.merge(df_gibushon_final_New, df_gibushon_Grade_New, on='ID_Num', how='outer')
+merged_df = pd.merge(merged_df, df_Rama_Grade_New, on='ID_Num', how='outer')
+merged_df = pd.merge(merged_df, df_Dapar_Grade_New, on='ID_Num', how='outer')
+merged_df = pd.merge(merged_df, df_Hebrew_Grade_New, on='ID_Num', how='outer')
+merged_df = pd.merge(merged_df, df_Normot_Grade_New, on='ID_Num', how='outer')
+merged_df = pd.merge(merged_df, df_gius_Grade_New, on='ID_Num', how='outer')
+merged_df = pd.merge(merged_df, df_Final_Gibushon_Dico_New, on='ID_Num', how='outer')
+merged_df = pd.merge(merged_df, df_Personality_Dis_New, on='ID_Num', how='outer')
+
+# Display the merged data frame
+merged_df
+      Predicted_Gibushon_Final_Grade_New       ID_Num  \
+0                               3.107213   37107588.0   
+1                               3.387140  211968169.0   
+2                               3.310372  340866375.0   
+3                               2.546464  206253106.0   
+4                               3.314058  310274717.0   
+...                                  ...          ...   
+2244                            3.274339  318256278.0   
+2245                            1.667510   21939632.0   
+2246                            3.758979   39169396.0   
+2247                            3.968252   57501777.0   
+2248                            3.755766   32794695.0   
+
+      Gibushon_Grade_Model_Linear_Regression_New  Predicted_Rama  \
+0                                       3.057018        4.544186   
+1                                       2.787854        3.895517   
+2                                       2.027121        4.175160   
+3                                       1.992218        3.457134   
+4                                       2.142329        3.516825   
+...                                          ...             ...   
+2244                                    2.128634        3.481318   
+2245                                    1.272529        3.721314   
+2246                                    3.119544        4.253590   
+2247                                    3.375904        4.600385   
+2248                                    3.430760        4.633158   
+
+      Predicted_Dapar  Predicted_Hebrew  Predicted_Normot  \
+0            8.494226          8.269838          0.688696   
+1            5.740960          7.526553          0.441165   
+2            4.567451          6.519356          1.812893   
+3            3.565801          6.643841          2.073432   
+4            4.822123          7.343707          0.784988   
+...               ...               ...               ...   
+2244         3.968185          7.154883          2.302686   
+2245         5.864237          6.028181          5.632622   
+2246         6.780521          8.423119          0.458496   
+2247         7.744939          8.264788          0.792221   
+2248         8.501701          8.667183         -0.079061   
+
+      Gius_Results_Model_Linear_Regression_New  Final_Gibushon_Dico_Improved  \
+0                                     0.827512                      0.719304   
+1                                     0.466486                      0.812919   
+2                                     0.162982                      0.528080   
+3                                     0.319897                      0.419802   
+4                                     0.079699                      0.708997   
+...                                        ...                           ...   
+2244                                  0.319556                      0.552755   
+2245                                  0.086953                      0.094780   
+2246                                  0.594436                      0.914990   
+2247                                  0.386604                      0.970842   
+2248                                  0.854754                      0.898844   
+
+      Personality_Dis_Model_Linear_Regression_New  
+0                                        0.452662  
+1                                        0.166524  
+2                                        0.699303  
+3                                        0.257713  
+4                                        0.186621  
+...                                           ...  
+2244                                     0.172022  
+2245                                     0.767201  
+2246                                     0.162439  
+2247                                     0.147886  
+2248                                     0.162494  
+
+[2249 rows x 10 columns]
+Round and Set Borders
+# Define custom rounding function
+def custom_round(x):
+    if x < 1:
+        return 1
+    elif x > 7:
+        return 7
+    else:
+        return round(x * 5) / 5
+
+# Apply custom rounding function to the 'XXX' column
+merged_df['Predicted_Gibushon_Final_Grade_New'] = merged_df['Predicted_Gibushon_Final_Grade_New'].apply(custom_round)
+# Define custom rounding function
+def custom_round(x):
+    if x < 1:
+        return 1
+    elif x > 7:
+        return 7
+    else:
+        return round(x * 5) / 5
+
+# Apply custom rounding function to the 'XXX' column
+merged_df['Predicted_Rama'] = merged_df['Predicted_Rama'].apply(custom_round)
+# Define custom rounding function
+def custom_round(x):
+    if x < 1:
+        return 1
+    elif x > 9:
+        return 9
+    else:
+        return round(x * 5) / 5
+
+# Apply custom rounding function to the 'XXX' column
+merged_df['Predicted_Dapar'] = merged_df['Predicted_Dapar'].apply(custom_round)
+# Define custom rounding function
+def custom_round(x):
+    if x < 5:
+        return 5
+    elif x > 9:
+        return 9
+    else:
+        return round(x * 5) / 5
+
+# Apply custom rounding function to the 'XXX' column
+merged_df['Predicted_Hebrew'] = merged_df['Predicted_Hebrew'].apply(custom_round)
+# Define custom rounding function
+def custom_round(x):
+    if x < 0:
+        return 0
+    elif x > 25:
+        return 25
+    else:
+        return round(x * 5) / 5
+
+# Apply custom rounding function to the 'XXX' column
+merged_df['Predicted_Normot'] = merged_df['Predicted_Normot'].apply(custom_round)
+# Define custom rounding function
+def custom_round(x):
+    if x < 1:
+        return 1
+    elif x > 7:
+        return 7
+    else:
+        return round(x * 5) / 5
+
+# Apply custom rounding function to the 'XXX' column
+merged_df['Gibushon_Grade_Model_Linear_Regression_New'] = merged_df['Gibushon_Grade_Model_Linear_Regression_New'].apply(custom_round)
+merged_df['Personality_Dis_Model_Linear_Regression_New'] *= 100
+merged_df['Personality_Dis_Model_Linear_Regression_New'] = merged_df['Personality_Dis_Model_Linear_Regression_New'].round(1)
+merged_df['Gius_Results_Model_Linear_Regression_New'] *= 100
+merged_df['Gius_Results_Model_Linear_Regression_New'] = merged_df['Gius_Results_Model_Linear_Regression_New'].round(1)
+merged_df['Final_Gibushon_Dico_Improved'] *= 100
+merged_df['Final_Gibushon_Dico_Improved'] = merged_df['Final_Gibushon_Dico_Improved'].round(1)
+merged_df.head()
+   Predicted_Gibushon_Final_Grade_New       ID_Num  \
+0                                 3.2   37107588.0   
+1                                 3.4  211968169.0   
+2                                 3.4  340866375.0   
+3                                 2.6  206253106.0   
+4                                 3.4  310274717.0   
+
+   Gibushon_Grade_Model_Linear_Regression_New  Predicted_Rama  \
+0                                         3.0             4.6   
+1                                         2.8             3.8   
+2                                         2.0             4.2   
+3                                         2.0             3.4   
+4                                         2.2             3.6   
+
+   Predicted_Dapar  Predicted_Hebrew  Predicted_Normot  \
+0              8.4               8.2               0.6   
+1              5.8               7.6               0.4   
+2              4.6               6.6               1.8   
+3              3.6               6.6               2.0   
+4              4.8               7.4               0.8   
+
+   Gius_Results_Model_Linear_Regression_New  Final_Gibushon_Dico_Improved  \
+0                                      82.8                          71.9   
+1                                      46.6                          81.3   
+2                                      16.3                          52.8   
+3                                      32.0                          42.0   
+4                                       8.0                          70.9   
+
+   Personality_Dis_Model_Linear_Regression_New  
+0                                         45.3  
+1                                         16.7  
+2                                         69.9  
+3                                         25.8  
+4                                         18.7  
+General Quality Grade
+transfer all predictor variables into z-scores as new variables
+import pandas as pd
+from scipy.stats import zscore
+
+# Assuming merge_df is your DataFrame
+
+# Calculate z-scores for all columns
+merge_df_z = merged_df.apply(zscore)
+
+# Add the z-scored columns with "_z" suffix
+for column in merged_df.columns:
+    merged_df[f"{column}_z"] = merge_df_z[column]
+
+# Display the DataFrame with added z-score columns
+#merged_df.head()
+Rotate relevant viarables with rotated scale
+merged_df['Personality_Dis_Model_Linear_Regression_New_z'] = merged_df.Personality_Dis_Model_Linear_Regression_New_z * -1
+merged_df['Predicted_Normot_z'] = merged_df.Predicted_Normot_z * -1
+Index quality calculation
+merged_df['Quality_Index'] = merged_df.Predicted_Gibushon_Final_Grade_New_z + merged_df.Gibushon_Grade_Model_Linear_Regression_New_z + merged_df.Predicted_Rama_z + merged_df.Predicted_Dapar_z + merged_df.Predicted_Hebrew_z + merged_df.Predicted_Normot_z + merged_df.Personality_Dis_Model_Linear_Regression_New_z
+from scipy.stats import zscore
+
+# Calculate z-scores for 'Quality_Index'
+merged_df['Quality_Index_z'] = zscore(merged_df['Quality_Index'])
+merged_df['Quality_Index'] = merged_df.Quality_Index_z * 15 + 50
+import pandas as pd
+
+# Limiting the values of 'xxx' between 0 and 100
+merged_df['Quality_Index'] = merged_df['Quality_Index'].clip(0, 100)
+Drop all Z-score variables predictors
+# Filter columns ending with "_z"
+columns_to_drop = merged_df.filter(regex='_z$', axis=1).columns
+
+# Drop the filtered columns
+merged_df.drop(columns=columns_to_drop, inplace=True)
+Differential trajectories of candidate selection process
+merged_df['Rama_Req'] = merged_df['Predicted_Rama'].apply(lambda x: 'נדרש לביצוע' if x <= 3 else 'לא נדרש לביצוע')
+merged_df['Dapar_Req'] = merged_df['Predicted_Dapar'].apply(lambda x: 'נדרש לביצוע' if x <= 5 else 'לא נדרש לביצוע')
+merged_df['Hebrew_Req'] = merged_df['Predicted_Hebrew'].apply(lambda x: 'נדרש לביצוע' if x <= 7 else 'לא נדרש לביצוע')
+merged_df['Normot_Req'] = merged_df['Predicted_Normot'].apply(lambda x: 'נדרש לביצוע' if x >= 2.5 else 'לא נדרש לביצוע')
+merged_df['Personality_Dis_Req'] = merged_df['Personality_Dis_Model_Linear_Regression_New'].apply(lambda x: 'נדרש לביצוע' if x >= 25 else 'צפי מעבר')
+merged_df['Gibushon_Req'] = merged_df['Gibushon_Grade_Model_Linear_Regression_New'].apply(lambda x: 'נדרש לביצוע' if x <= 3 else 'לא נדרש לביצוע')
+merged_df['Gius_Results_Req'] = merged_df['Gius_Results_Model_Linear_Regression_New'].apply(lambda x: 'נדרש בתהליך מלא' if x <= 25 else 'צפי מעבר')
+merged_df['Gibushon_Final_Req'] = merged_df['Predicted_Gibushon_Final_Grade_New'].apply(lambda x: 'נדרש בתהליך מלא' if x <= 3 else 'לא נדרש לביצוע')
+merged_df['Final_Gibushon_Dico_Req'] = merged_df['Final_Gibushon_Dico_Improved'].apply(lambda x: 'נדרש בתהליך מלא' if x <= 25 else 'צפי מעבר')
+merged_df
+      Predicted_Gibushon_Final_Grade_New       ID_Num  \
+0                                    3.2   37107588.0   
+1                                    3.4  211968169.0   
+2                                    3.4  340866375.0   
+3                                    2.6  206253106.0   
+4                                    3.4  310274717.0   
+...                                  ...          ...   
+2244                                 3.2  318256278.0   
+2245                                 1.6   21939632.0   
+2246                                 3.8   39169396.0   
+2247                                 4.0   57501777.0   
+2248                                 3.8   32794695.0   
+
+      Gibushon_Grade_Model_Linear_Regression_New  Predicted_Rama  \
+0                                            3.0             4.6   
+1                                            2.8             3.8   
+2                                            2.0             4.2   
+3                                            2.0             3.4   
+4                                            2.2             3.6   
+...                                          ...             ...   
+2244                                         2.2             3.4   
+2245                                         1.2             3.8   
+2246                                         3.2             4.2   
+2247                                         3.4             4.6   
+2248                                         3.4             4.6   
+
+      Predicted_Dapar  Predicted_Hebrew  Predicted_Normot  \
+0                 8.4               8.2               0.6   
+1                 5.8               7.6               0.4   
+2                 4.6               6.6               1.8   
+3                 3.6               6.6               2.0   
+4                 4.8               7.4               0.8   
+...               ...               ...               ...   
+2244              4.0               7.2               2.4   
+2245              5.8               6.0               5.6   
+2246              6.8               8.4               0.4   
+2247              7.8               8.2               0.8   
+2248              8.6               8.6               0.0   
+
+      Gius_Results_Model_Linear_Regression_New  Final_Gibushon_Dico_Improved  \
+0                                         82.8                          71.9   
+1                                         46.6                          81.3   
+2                                         16.3                          52.8   
+3                                         32.0                          42.0   
+4                                          8.0                          70.9   
+...                                        ...                           ...   
+2244                                      32.0                          55.3   
+2245                                       8.7                           9.5   
+2246                                      59.4                          91.5   
+2247                                      38.7                          97.1   
+2248                                      85.5                          89.9   
+
+      Personality_Dis_Model_Linear_Regression_New  Quality_Index  \
+0                                            45.3      71.795041   
+1                                            16.7      62.777005   
+2                                            69.9      37.096499   
+3                                            25.8      33.187702   
+4                                            18.7      52.288952   
+...                                           ...            ...   
+2244                                         17.2      42.019530   
+2245                                         76.7       6.474492   
+2246                                         16.2      76.955247   
+2247                                         14.8      83.382855   
+2248                                         16.2      88.298313   
+
+            Rama_Req       Dapar_Req      Hebrew_Req      Normot_Req  \
+0     לא נדרש לביצוע  לא נדרש לביצוע  לא נדרש לביצוע  לא נדרש לביצוע   
+1     לא נדרש לביצוע  לא נדרש לביצוע  לא נדרש לביצוע  לא נדרש לביצוע   
+2     לא נדרש לביצוע     נדרש לביצוע     נדרש לביצוע  לא נדרש לביצוע   
+3     לא נדרש לביצוע     נדרש לביצוע     נדרש לביצוע  לא נדרש לביצוע   
+4     לא נדרש לביצוע     נדרש לביצוע  לא נדרש לביצוע  לא נדרש לביצוע   
+...              ...             ...             ...             ...   
+2244  לא נדרש לביצוע     נדרש לביצוע  לא נדרש לביצוע  לא נדרש לביצוע   
+2245  לא נדרש לביצוע  לא נדרש לביצוע     נדרש לביצוע     נדרש לביצוע   
+2246  לא נדרש לביצוע  לא נדרש לביצוע  לא נדרש לביצוע  לא נדרש לביצוע   
+2247  לא נדרש לביצוע  לא נדרש לביצוע  לא נדרש לביצוע  לא נדרש לביצוע   
+2248  לא נדרש לביצוע  לא נדרש לביצוע  לא נדרש לביצוע  לא נדרש לביצוע   
+
+     Personality_Dis_Req    Gibushon_Req Gius_Results_Req Gibushon_Final_Req  \
+0            נדרש לביצוע     נדרש לביצוע         צפי מעבר     לא נדרש לביצוע   
+1               צפי מעבר     נדרש לביצוע         צפי מעבר     לא נדרש לביצוע   
+2            נדרש לביצוע     נדרש לביצוע  נדרש בתהליך מלא     לא נדרש לביצוע   
+3            נדרש לביצוע     נדרש לביצוע         צפי מעבר    נדרש בתהליך מלא   
+4               צפי מעבר     נדרש לביצוע  נדרש בתהליך מלא     לא נדרש לביצוע   
+...                  ...             ...              ...                ...   
+2244            צפי מעבר     נדרש לביצוע         צפי מעבר     לא נדרש לביצוע   
+2245         נדרש לביצוע     נדרש לביצוע  נדרש בתהליך מלא    נדרש בתהליך מלא   
+2246            צפי מעבר  לא נדרש לביצוע         צפי מעבר     לא נדרש לביצוע   
+2247            צפי מעבר  לא נדרש לביצוע         צפי מעבר     לא נדרש לביצוע   
+2248            צפי מעבר  לא נדרש לביצוע         צפי מעבר     לא נדרש לביצוע   
+
+     Final_Gibushon_Dico_Req  
+0                   צפי מעבר  
+1                   צפי מעבר  
+2                   צפי מעבר  
+3                   צפי מעבר  
+4                   צפי מעבר  
+...                      ...  
+2244                צפי מעבר  
+2245         נדרש בתהליך מלא  
+2246                צפי מעבר  
+2247                צפי מעבר  
+2248                צפי מעבר  
+
+[2249 rows x 20 columns]
+Change Variables Names
+merged_df.rename(columns={'Final_Gibushon_Dico_Improved': 'סיכוי מעבר תהליך המיון - תפקידי ליבה בלבד'}, inplace=True)
+merged_df.rename(columns={'Predicted_Gibushon_Final_Grade_New': 'ציון מנובא - תיק אינטגרטיבי - תפקידי ליבה בלבד'}, inplace=True)
+merged_df.rename(columns={'Predicted_Rama': 'ציון מנובא - ראיון התאמה - רמה'}, inplace=True)
+merged_df.rename(columns={'Predicted_Dapar': 'ציון מנובא - דפר'}, inplace=True)
+merged_df.rename(columns={'Predicted_Hebrew': 'ציון מנובא - עברית'}, inplace=True)
+merged_df.rename(columns={'Predicted_Normot': 'ציון מנובא - מבחן נורמות'}, inplace=True)
+merged_df.rename(columns={'Personality_Dis_Model_Linear_Regression_New': 'ציון מנובא - סיכוי לפסילת אישיות'}, inplace=True)
+merged_df.rename(columns={'Gibushon_Grade_Model_Linear_Regression_New': 'ציון מנובא גיבושון - לתפקידי ליבה בלבד'}, inplace=True)
+merged_df.rename(columns={'Gius_Results_Model_Linear_Regression_New': 'סיכוי מעבר תהליך הגיוס - כלל המועמדים'}, inplace=True)
+merged_df.rename(columns={'Rama_Req': 'בדיקת ראיון התאמה'}, inplace=True)
+merged_df.rename(columns={'Dapar_Req': 'מבחן דפר'}, inplace=True)
+merged_df.rename(columns={'Hebrew_Req': 'מבחן עברית'}, inplace=True)
+merged_df.rename(columns={'Normot_Req': 'מבחן נורמות'}, inplace=True)
+merged_df.rename(columns={'Personality_Dis_Req': 'בדיקת אישיות'}, inplace=True)
+merged_df.rename(columns={'Gibushon_Req': 'גיבושון - לתפקידי ליבה בלבד'}, inplace=True)
+merged_df.rename(columns={'Gius_Results_Req': 'תחזית תוצאת תהליך הגיוס - כלל המועמדים'}, inplace=True)
+merged_df.rename(columns={'Gibushon_Final_Req': 'תחזית מעבר תהליך המיון - קטגוריות - תפקידי ליבה בלבד'}, inplace=True)
+merged_df.rename(columns={'Final_Gibushon_Dico_Req': 'תחזית מעבר תהליך המיון - אחוזים - לתפקידי ליבה בלבד'}, inplace=True)
+merged_df.rename(columns={'Quality_Index': 'שקלול איכות המועמד'}, inplace=True)
+#merged_df.rename(columns={'ID_Num': 'תעודת זהות'}, inplace=True)
+# Re-Order Variables in Dataframe
+desired_order = ['ID_Num', 'ציון מנובא - דפר', 'ציון מנובא - עברית', 'ציון מנובא - ראיון התאמה - רמה', 
+                 'ציון מנובא - מבחן נורמות', 'ציון מנובא - סיכוי לפסילת אישיות', 
+                 'ציון מנובא גיבושון - לתפקידי ליבה בלבד', 
+                 'ציון מנובא - תיק אינטגרטיבי - תפקידי ליבה בלבד', 
+                 'סיכוי מעבר תהליך המיון - תפקידי ליבה בלבד', 
+                 'סיכוי מעבר תהליך הגיוס - כלל המועמדים', 
+                 'מבחן דפר', 'מבחן עברית', 'בדיקת ראיון התאמה', 
+                 'מבחן נורמות', 'בדיקת אישיות', 'גיבושון - לתפקידי ליבה בלבד', 
+                 'תחזית תוצאת תהליך הגיוס - כלל המועמדים', 'תחזית מעבר תהליך המיון - קטגוריות - תפקידי ליבה בלבד',
+                 'תחזית מעבר תהליך המיון - אחוזים - לתפקידי ליבה בלבד', 'שקלול איכות המועמד']
+
+# Reindex the DataFrame columns
+merged_df = merged_df.reindex(columns=desired_order)
+Join Backround and Negative Indications
+Change Key Variable Type
+df['ID_Num'] = df['ID_Num'].astype(float)
+merged_df['ID_Num'] = merged_df['ID_Num'].astype(float)
+Left
+relevant_variables = ['ID_Num', 'First_Name', 'Last_Name', "Gender_Dico", "Married_Dico", "Minority_Type_Categor", "Nation_Dico", "Age_Num", "Current_Education_Categor", "Mail", "Past_Permanent_Officer_Dico", "Saham_Officer_Past_Dico", "Commander_Army_Dico", "Kazin_Army_Dico", "Combat_Service_Army_Dico", "Number_of_Attempts_Num", "Max_Procedure_Duration_Num", "Prisha_Yezoma_on_Last_Attempt_Dico", "Another_Job_Nomination_Dico", "Previous_Arrest_Dico", "Criminal_Record_Dico", "Conviction_in_Court_Dico", "Hard_Drugs_Dico", "Past_Layoffs_Dico", "Unemployment_Dico", "Financial_Difficulties_Dico", "Pshitat_Regel_Dico", "Debts_Dico", "Chronic_Disease_Dico", "Cigarettes_Dico", "Physical_Limitations_Dico", "Mental_Difficulties_Dico", "Psychiatric_Drugs_Dico", "Army_Disciplinary_Dico", "Conviction_Army_Dico", "Arrest_Prison_Army_Dico", "Mental_Treatment_Army_Dico", "Mental_Release_Army_Dico", "Drinking_Alcohol_Frequ_Num", "Gambling_Frequ_Num", "No_Bagrut_Dico", "Evaluation_Center_Filed_Last_Attempt_Dico", "Dapar_Hebrew_Failurer_Last_Attempt_Dico", "Use_Force", "Default_Employment", "Gambling", "Hard_Drugs_Last_Use_Num", "Light_Drugs_Last_Year_Dico", "Light_Drugs_Last_Use_Num", "Underweight_BMI_Dumi", "Overweight_BMI_Dumi", "Obesity_BMI_Dumi", "Normal_BMI_Dumi", "Date"]
+
+# Merge df with merged_df using a left join
+merged_df = pd.merge(merged_df, df[relevant_variables], on='ID_Num', how='left')
+Change Key Variable Name
+merged_df.rename(columns={'ID_Num': 'תעודת זהות'}, inplace=True)
+merged_df.head()
+    תעודת זהות  ציון מנובא - דפר  ציון מנובא - עברית  \
+0   37107588.0               8.4                 8.2   
+1  211968169.0               5.8                 7.6   
+2  340866375.0               4.6                 6.6   
+3  206253106.0               3.6                 6.6   
+4  310274717.0               4.8                 7.4   
+
+   ציון מנובא - ראיון התאמה - רמה  ציון מנובא - מבחן נורמות  \
+0                             4.6                       0.6   
+1                             3.8                       0.4   
+2                             4.2                       1.8   
+3                             3.4                       2.0   
+4                             3.6                       0.8   
+
+   ציון מנובא - סיכוי לפסילת אישיות  ציון מנובא גיבושון - לתפקידי ליבה בלבד  \
+0                              45.3                                     3.0   
+1                              16.7                                     2.8   
+2                              69.9                                     2.0   
+3                              25.8                                     2.0   
+4                              18.7                                     2.2   
+
+   ציון מנובא - תיק אינטגרטיבי - תפקידי ליבה בלבד  \
+0                                             3.2   
+1                                             3.4   
+2                                             3.4   
+3                                             2.6   
+4                                             3.4   
+
+   סיכוי מעבר תהליך המיון - תפקידי ליבה בלבד  \
+0                                       71.9   
+1                                       81.3   
+2                                       52.8   
+3                                       42.0   
+4                                       70.9   
+
+   סיכוי מעבר תהליך הגיוס - כלל המועמדים  ... Default_Employment Gambling  \
+0                                   82.8  ...                  0        0   
+1                                   46.6  ...                  0        0   
+2                                   16.3  ...                  0        0   
+3                                   32.0  ...                  0        0   
+4                                    8.0  ...                  0        0   
+
+  Hard_Drugs_Last_Use_Num Light_Drugs_Last_Year_Dico Light_Drugs_Last_Use_Num  \
+0                5.407407                          0                 4.405405   
+1                5.407407                          0                 4.405405   
+2                5.407407                          0                 4.405405   
+3                5.407407                          1                 1.000000   
+4                5.407407                          0                 4.405405   
+
+  Underweight_BMI_Dumi Overweight_BMI_Dumi Obesity_BMI_Dumi Normal_BMI_Dumi  \
+0                    0                   0                0               1   
+1                    0                   0                0               1   
+2                    0                   0                1               0   
+3                    0                   1                0               0   
+4                    0                   0                0               1   
+
+               Date  
+0  21/08/2023 14:44  
+1  17/08/2023 09:37  
+2  17/08/2023 07:43  
+3  17/08/2023 07:34  
+4  17/08/2023 07:45  
+
+[5 rows x 73 columns]
+merged_df
+Recode Means Imputation for Missing Values in Drugs use Freq Variables
+merged_df.loc[(merged_df['Hard_Drugs_Last_Use_Num'] >= 5.4) & (merged_df['Hard_Drugs_Last_Use_Num'] <= 5.5), 'Hard_Drugs_Last_Use_Num'] = "-"
+merged_df.loc[(merged_df['Light_Drugs_Last_Use_Num'] >= 4.4) & (merged_df['Light_Drugs_Last_Use_Num'] <= 4.5), 'Light_Drugs_Last_Use_Num'] = "-"
+**Change Relevant Variables to Precentage
+columns_to_modify = ["סיכוי מעבר תהליך הגיוס - כלל המועמדים" ,"ציון מנובא - סיכוי לפסילת אישיות", "סיכוי מעבר תהליך המיון - תפקידי ליבה בלבד"]
+for column in columns_to_modify:
+    merged_df[column] = merged_df[column].astype(str) + '%'
+Merge name columns
+# Merge "First_Name" and "Last_Name" with a space in between and create a new column "Name"
+merged_df['שם ושם משפחה'] = merged_df['First_Name'] + ' ' + merged_df['Last_Name']
+
+# Drop the columns "First_Name" and "Last_Name" from the DataFrame
+merged_df.drop(columns=['First_Name', 'Last_Name'], inplace=True)
+
+# Reorganize the columns to place "Name" as the second variable
+columns = list(merged_df.columns)
+columns.remove('שם ושם משפחה')  # Remove "Name" from the list of columns
+columns.insert(1, 'שם ושם משפחה')  # Insert "Name" at the second position
+merged_df = merged_df.reindex(columns=columns)
+Variables Recode
+merged_df['Nation_Dico'] = merged_df['Nation_Dico'].replace({1: "יהודי", 0: "בן המגזר הערבי"})
+# Define the mapping dictionary for replacement
+replacement_mapping = {
+    1: "בן הקהילה האתיופית",
+    2: "בן העדה הדרוזית",
+    3: "ערבי צ'רקסי",
+    4: "ערבי נוצרי",
+    5: "ערבי מוסלמי",
+    999: "-"
+}
+
+# Replace values in the "Minority_Type_Categor" column using the defined mapping
+merged_df['Minority_Type_Categor'] = merged_df['Minority_Type_Categor'].replace(replacement_mapping)
+# Define the mapping dictionary for replacement
+replacement_mapping = {
+    1: "אף פעם",
+    2: "פעם - פעמיים בשנה",
+    3: "פעם - פעמיים בחודש",
+    4: "פעם - פעמיים בשבוע",
+    5: "יותר מפעמיים בשבוע",
+    6: "מידי יום"
+
+}
+
+# Replace values in the "Minority_Type_Categor" column using the defined mapping
+merged_df['Drinking_Alcohol_Frequ_Num'] = merged_df['Drinking_Alcohol_Frequ_Num'].replace(replacement_mapping)
+# Define the mapping dictionary for replacement
+replacement_mapping = {
+    1: "אף פעם",
+    2: "פעם - פעמיים בשנה",
+    3: "פעם - פעמיים בחודש",
+    4: "פעם - פעמיים בשבוע",
+    5: "יותר מפעמיים בשבוע",
+    6: "מידי יום"
+
+}
+
+# Replace values in the "Minority_Type_Categor" column using the defined mapping
+merged_df['Gambling_Frequ_Num'] = merged_df['Gambling_Frequ_Num'].replace(replacement_mapping)
+# Define the mapping dictionary for replacement
+replacement_mapping = {
+    1: "תיכון ללא בגרויות",
+    2: "תיכון עם בגרות מלאה",
+    3: "תואר ראשון",
+    4: "תואר שני",
+    5: "תואר שלישי",
+}
+
+# Replace values in the "Minority_Type_Categor" column using the defined mapping
+merged_df['Current_Education_Categor'] = merged_df['Minority_Type_Categor'].replace(replacement_mapping)
+drinking_alcohol_freq_num_df = merged_df[['Drinking_Alcohol_Frequ_Num']]
+
+# Display the dataframe
+print(drinking_alcohol_freq_num_df)
+     Drinking_Alcohol_Frequ_Num
+0             פעם - פעמיים בשנה
+1                        אף פעם
+2             פעם - פעמיים בשנה
+3                        אף פעם
+4            פעם - פעמיים בחודש
+...                         ...
+2244                     אף פעם
+2245         פעם - פעמיים בחודש
+2246                     אף פעם
+2247          פעם - פעמיים בשנה
+2248          פעם - פעמיים בשנה
+
+[2249 rows x 1 columns]
+# List of variables to change
+variables_to_change = [
+    "Past_Permanent_Officer_Dico",
+    "Saham_Officer_Past_Dico",
+    "Commander_Army_Dico",
+    "Kazin_Army_Dico",
+    "Combat_Service_Army_Dico",
+    "Prisha_Yezoma_on_Last_Attempt_Dico",
+    "Another_Job_Nomination_Dico",
+    "Previous_Arrest_Dico",
+    "Criminal_Record_Dico",
+    "Conviction_in_Court_Dico",
+    "Hard_Drugs_Dico",
+    "Past_Layoffs_Dico",
+    "Unemployment_Dico",
+    "Financial_Difficulties_Dico",
+    "Pshitat_Regel_Dico",
+    "Debts_Dico",
+    "Chronic_Disease_Dico",
+    "Cigarettes_Dico",
+    "Physical_Limitations_Dico",
+    "Mental_Difficulties_Dico",
+    "Psychiatric_Drugs_Dico",
+    "Army_Disciplinary_Dico",
+    "Conviction_Army_Dico",
+    "Arrest_Prison_Army_Dico",
+    "Mental_Treatment_Army_Dico",
+    "Mental_Release_Army_Dico",
+    "Evaluation_Center_Filed_Last_Attempt_Dico",
+    "Dapar_Hebrew_Failurer_Last_Attempt_Dico",
+    "Gambling",
+    "Use_Force",
+    "Default_Employment",
+    "Light_Drugs_Last_Year_Dico"
+]
+
+# Iterate over each variable and perform the replacement
+for variable in variables_to_change:
+    merged_df[variable] = merged_df[variable].replace({1: "כן", 0: "-"})
+merged_df.head()
+    תעודת זהות שם ושם משפחה  ציון מנובא - דפר  ציון מנובא - עברית  \
+0   37107588.0          * *               8.4                 8.2   
+1  211968169.0          * *               5.8                 7.6   
+2  340866375.0          * *               4.6                 6.6   
+3  206253106.0          * *               3.6                 6.6   
+4  310274717.0          * *               4.8                 7.4   
+
+   ציון מנובא - ראיון התאמה - רמה  ציון מנובא - מבחן נורמות  \
+0                             4.6                       0.6   
+1                             3.8                       0.4   
+2                             4.2                       1.8   
+3                             3.4                       2.0   
+4                             3.6                       0.8   
+
+  ציון מנובא - סיכוי לפסילת אישיות  ציון מנובא גיבושון - לתפקידי ליבה בלבד  \
+0                            45.3%                                     3.0   
+1                            16.7%                                     2.8   
+2                            69.9%                                     2.0   
+3                            25.8%                                     2.0   
+4                            18.7%                                     2.2   
+
+   ציון מנובא - תיק אינטגרטיבי - תפקידי ליבה בלבד  \
+0                                             3.2   
+1                                             3.4   
+2                                             3.4   
+3                                             2.6   
+4                                             3.4   
+
+  סיכוי מעבר תהליך המיון - תפקידי ליבה בלבד  ... Default_Employment Gambling  \
+0                                     71.9%  ...                  -        -   
+1                                     81.3%  ...                  -        -   
+2                                     52.8%  ...                  -        -   
+3                                     42.0%  ...                  -        -   
+4                                     70.9%  ...                  -        -   
+
+  Hard_Drugs_Last_Use_Num Light_Drugs_Last_Year_Dico Light_Drugs_Last_Use_Num  \
+0                       -                          -                        -   
+1                       -                          -                        -   
+2                       -                          -                        -   
+3                       -                         כן                      1.0   
+4                       -                          -                        -   
+
+  Underweight_BMI_Dumi Overweight_BMI_Dumi Obesity_BMI_Dumi Normal_BMI_Dumi  \
+0                    0                   0                0               1   
+1                    0                   0                0               1   
+2                    0                   0                1               0   
+3                    0                   1                0               0   
+4                    0                   0                0               1   
+
+               Date  
+0  21/08/2023 14:44  
+1  17/08/2023 09:37  
+2  17/08/2023 07:43  
+3  17/08/2023 07:34  
+4  17/08/2023 07:45  
+
+[5 rows x 72 columns]
+Change Categories Names - No Bagrut
+merged_df['No_Bagrut_Dico'] = merged_df['No_Bagrut_Dico'].replace({1: "ללא בגרות", 0: "-"})
+Change Categories Names - Gender
+merged_df['Gender_Dico'] = merged_df['Gender_Dico'].replace({1: "גבר", 0: "אישה"})
+Change Categories Names - Marital Status
+merged_df['Married_Dico'] = merged_df['Married_Dico'].replace({"1": "נשוי", "0": "רווק"})
+Merge BMI Categories and Names
+merged_df['Underweight_BMI_Dumi'] = merged_df['Underweight_BMI_Dumi'].replace({1: "תת משקל", 0: ""})
+merged_df['Overweight_BMI_Dumi'] = merged_df['Overweight_BMI_Dumi'].replace({1: "משקל יתר", 0: ""})
+merged_df['Obesity_BMI_Dumi'] = merged_df['Obesity_BMI_Dumi'].replace({1: "השמנת יתר", 0: ""})
+merged_df['Normal_BMI_Dumi'] = merged_df['Normal_BMI_Dumi'].replace({1: "משקל תקין", 0: ""})
+# Merge the variables with spaces between them and create a new variable "BMI Measure"
+merged_df['BMI Measure'] = merged_df['Underweight_BMI_Dumi'] + ' ' + merged_df['Overweight_BMI_Dumi'] + ' ' + merged_df['Obesity_BMI_Dumi'] + ' ' + merged_df['Normal_BMI_Dumi']
+
+# Drop the original variables
+merged_df.drop(columns=['Underweight_BMI_Dumi', 'Overweight_BMI_Dumi', 'Obesity_BMI_Dumi', 'Normal_BMI_Dumi'], inplace=True)
+merged_df.head()
+    תעודת זהות שם ושם משפחה  ציון מנובא - דפר  ציון מנובא - עברית  \
+0   37107588.0          * *               8.4                 8.2   
+1  211968169.0          * *               5.8                 7.6   
+2  340866375.0          * *               4.6                 6.6   
+3  206253106.0          * *               3.6                 6.6   
+4  310274717.0          * *               4.8                 7.4   
+
+   ציון מנובא - ראיון התאמה - רמה  ציון מנובא - מבחן נורמות  \
+0                             4.6                       0.6   
+1                             3.8                       0.4   
+2                             4.2                       1.8   
+3                             3.4                       2.0   
+4                             3.6                       0.8   
+
+  ציון מנובא - סיכוי לפסילת אישיות  ציון מנובא גיבושון - לתפקידי ליבה בלבד  \
+0                            45.3%                                     3.0   
+1                            16.7%                                     2.8   
+2                            69.9%                                     2.0   
+3                            25.8%                                     2.0   
+4                            18.7%                                     2.2   
+
+   ציון מנובא - תיק אינטגרטיבי - תפקידי ליבה בלבד  \
+0                                             3.2   
+1                                             3.4   
+2                                             3.4   
+3                                             2.6   
+4                                             3.4   
+
+  סיכוי מעבר תהליך המיון - תפקידי ליבה בלבד  ...  \
+0                                     71.9%  ...   
+1                                     81.3%  ...   
+2                                     52.8%  ...   
+3                                     42.0%  ...   
+4                                     70.9%  ...   
+
+  Evaluation_Center_Filed_Last_Attempt_Dico  \
+0                                         -   
+1                                         -   
+2                                        כן   
+3                                         -   
+4                                         -   
+
+  Dapar_Hebrew_Failurer_Last_Attempt_Dico Use_Force Default_Employment  \
+0                                       -         -                  -   
+1                                       -         -                  -   
+2                                       -         -                  -   
+3                                       -        כן                  -   
+4                                       -         -                  -   
+
+  Gambling Hard_Drugs_Last_Use_Num Light_Drugs_Last_Year_Dico  \
+0        -                       -                          -   
+1        -                       -                          -   
+2        -                       -                          -   
+3        -                       -                         כן   
+4        -                       -                          -   
+
+  Light_Drugs_Last_Use_Num              Date   BMI Measure  
+0                        -  21/08/2023 14:44     משקל תקין  
+1                        -  17/08/2023 09:37     משקל תקין  
+2                        -  17/08/2023 07:43    השמנת יתר   
+3                      1.0  17/08/2023 07:34    משקל יתר    
+4                        -  17/08/2023 07:45     משקל תקין  
+
+[5 rows x 69 columns]
+Export to Excel
+Replaced File - New File that erase all old data
+download_path = r'C:/Users/Knowl/Desktop/‏‏SADAC System Project/2Output/1Models Predictions - Replaced/Models_Prediction.xlsx'
+merged_df.to_excel(download_path, index=False)
+
+print(f"Excel file saved to: {download_path}")
+Excel file saved to: C:/Users/Knowl/Desktop/‏‏SADAC System Project/2Output/1Models Predictions - Replaced/Models_Prediction.xlsx
+Dashboard File - Keeps Data in Another Sheets
+import pandas as pd
+
+download_path = r'C:/Users/Knowl/Desktop/‏‏SADAC System Project/2Output/2Models Predictions - For Dashboard/Dashboard File.xlsx'
+
+# Load existing Excel file
+existing_excel = pd.ExcelFile(download_path)
+
+# Read all sheets into a dictionary of dataframes
+dfs = {sheet_name: existing_excel.parse(sheet_name) for sheet_name in existing_excel.sheet_names}
+
+# Update the 'Models_Data' tab with the new data
+dfs['Models_Data'] = merged_df
+
+# Save all data back to the Excel file
+with pd.ExcelWriter(download_path) as writer:
+    for sheet_name, df in dfs.items():
+        df.to_excel(writer, sheet_name=sheet_name, index=False)
+
+print(f"Excel file updated and saved to: {download_path}")
+Excel file updated and saved to: C:/Users/Knowl/Desktop/‏‏SADAC System Project/2Output/2Models Predictions - For Dashboard/Dashboard File.xlsx
+Historic Files - Keeps All Past Saved Files
+import os
+from datetime import datetime
+
+# Define the directory where the files will be saved
+directory = r'C:/Users/Knowl/Desktop/‏‏SADAC System Project/2Output/‏‏3Models Predictions - History/'
+
+# Generate a filename with the current date and time
+current_datetime = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+filename = f'Models_Prediction_{current_datetime}.xlsx'
+
+# Combine directory and filename to create the full path
+download_path = os.path.join(directory, filename)
+
+# Save the data to the new Excel file
+merged_df.to_excel(download_path, index=False)
+
+print(f"Excel file saved to: {download_path}")
+Excel file saved to: C:/Users/Knowl/Desktop/‏‏SADAC System Project/2Output/‏‏3Models Predictions - History/Models_Prediction_2024-04-09_16-17-52.xlsx
+
+
